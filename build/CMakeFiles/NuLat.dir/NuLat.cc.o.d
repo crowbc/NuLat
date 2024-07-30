@@ -698,6 +698,72 @@ CMakeFiles/NuLat.dir/NuLat.cc.o: \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4AnyMethod.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VisAttributes.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Colour.hh \
+ /home/jack/Documents/geant4/NuLat/include/NuLatPMTsensitiveDetector.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4AnalysisManager.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4GenericAnalysisManager.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ToolsAnalysisManager.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VAnalysisManager.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4AnalysisManagerState.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4AnalysisVerbose.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VTBaseHnManager.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4HnInformation.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4AnalysisUtilities.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4BinScheme.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Fcn.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VAnalysisManager.icc \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4HnManager.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4BaseAnalysisManager.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4NtupleBookingManager.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/ntuple_booking \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/cids \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/cid \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/typedefs \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/forit \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4NtupleBookingManager.icc \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VNtupleManager.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VFileManager.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4BaseFileManager.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VTHnFileManager.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TH1ToolsManager.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4THnToolsManager.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4THnManager.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4THnManager.icc \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4THnMessenger.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4THnToolsManager.icc \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4THnMessenger.icc \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Tokenizer.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TH2ToolsManager.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TH3ToolsManager.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TP1ToolsManager.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TP2ToolsManager.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/h1d \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/h1 \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/b1 \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/base_histo \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/histo_data \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/axes \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/axis \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/eqT \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/h2d \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/h2 \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/b2 \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/h3d \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/h3 \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/b3 \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/p1d \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/p1 \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/profile_data \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/p2d \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/p2 \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ToolsAnalysisManager.icc \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4GenericAnalysisManager.icc \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4GenericFileManager.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4GenericFileManager.icc \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TouchableHistory.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Track.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Step.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TrackingManager.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4EventManager.hh \
  /home/jack/Documents/geant4/NuLat/include/NuLatPhysics.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VModularPhysicsList.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VPhysicsConstructor.hh \
@@ -755,4 +821,22 @@ CMakeFiles/NuLat.dir/NuLat.cc.o: \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VRestDiscreteProcess.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ParticleChangeForDecay.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4DecayProcessType.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4RadioactiveDecayPhysics.hh
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4RadioactiveDecayPhysics.hh \
+ /home/jack/Documents/geant4/NuLat/include/NuLatAction.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VUserActionInitialization.hh \
+ /home/jack/Documents/geant4/NuLat/include/NuLatGenerator.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VUserPrimaryGeneratorAction.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ParticleGun.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VPrimaryGenerator.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ParticleTable.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Geantino.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4IonTable.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Ions.hh \
+ /home/jack/Documents/geant4/NuLat/include/NuLatRun.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4UserRunAction.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Run.hh \
+ /home/jack/Documents/geant4/NuLat/include/NuLatEvent.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4UserEventAction.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Event.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4HCofThisEvent.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VTrajectory.hh

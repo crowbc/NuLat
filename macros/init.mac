@@ -1,0 +1,8 @@
+# Macro file for the initialization phase of NuLat
+# when running in interactive mode -- called from init_vis.mac also
+#
+/run/initialize
+# Set some default verbose
+/control/verbose 2
+/control/saveHistory
+/run/verbose 2

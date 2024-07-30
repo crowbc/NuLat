@@ -12,14 +12,16 @@
 #include "G4UImanager.hh"
 #include "G4RunManager.hh"
 #include "G4RunManagerFactory.hh"
+#ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
+#endif
 #include "G4UIExecutive.hh"
 #include "G4VisManager.hh"
 #include "G4VisExecutive.hh"
 // Included simulation libraries -- uncomment action header when class is written
 #include "NuLatDetectorConstruction.hh"
 #include "NuLatPhysics.hh"
-//#include "NuLatAction.hh"
+#include "NuLatAction.hh"
 using namespace std;
 // main()
 int main(int argc, char** argv)
@@ -32,7 +34,7 @@ int main(int argc, char** argv)
 		// Set mandatory initialization classes
 		rMan->SetUserInitialization(new NuLatDetectorConstruction());
 		rMan->SetUserInitialization(new NuLatPhysicsList());
-		//rMan->SetUserInitialization(new NuLatActionInitialization());
+		rMan->SetUserInitialization(new NuLatActionInitialization());
 		// put "/run/numberOfThreads <N>" in macro file, where <N> is the number of cores to use in simulation
 		// put "/run/initialize" in macro file
 	#else
@@ -41,11 +43,13 @@ int main(int argc, char** argv)
 		// Set mandatory initialization classes -- uncomment action initialization when class is written
 		rMan->SetUserInitialization(new NuLatDetectorConstruction());
 		rMan->SetUserInitialization(new NuLatPhysicsList());
-		//rMan->SetUserInitialization(new NuLatActionInitialization());
+		rMan->SetUserInitialization(new NuLatActionInitialization());
 		// Initialize G4 kernel if Geant4 environment is defined in single thread mode
 		rMan->Initialize();
 	#endif
 	// Default strings for initializing
+	G4String pathCmd = "/control/macroPath ";
+	G4String macPath = "/home/jack/Documents/geant4/NuLat/macros/";
 	G4String macCmd = "/control/execute ";
 	G4String macName = "init_vis.mac";
 	// Default UI for interactive mode
@@ -61,12 +65,14 @@ int main(int argc, char** argv)
 	if(ui)
 	{
 		// Open the viewer and run in interactive mode
+		UIman->ApplyCommand(pathCmd+macPath);
 		UIman->ApplyCommand(macCmd+macName);
 		ui->SessionStart();	
 	}
 	else
 	{
 		// Run in batch mode using command line input to execute the specified macro. Runtime environment handles macro exceptions
+		UIman->ApplyCommand(pathCmd+macPath);
 		macName=argv[1];
 		UIman->ApplyCommand(macCmd+macName);
 	}

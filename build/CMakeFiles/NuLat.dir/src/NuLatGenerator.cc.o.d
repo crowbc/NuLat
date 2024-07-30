@@ -1,9 +1,14 @@
-CMakeFiles/NuLat.dir/src/NuLatDetectorConstruction.cc.o: \
- /home/jack/Documents/geant4/NuLat/src/NuLatDetectorConstruction.cc \
+CMakeFiles/NuLat.dir/src/NuLatGenerator.cc.o: \
+ /home/jack/Documents/geant4/NuLat/src/NuLatGenerator.cc \
  /usr/include/stdc-predef.h \
- /home/jack/Documents/geant4/NuLat/include/NuLatDetectorConstruction.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VUserDetectorConstruction.hh \
- /usr/include/c++/11/vector /usr/include/c++/11/bits/stl_algobase.h \
+ /home/jack/Documents/geant4/NuLat/include/NuLatGenerator.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VUserPrimaryGeneratorAction.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ParticleGun.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/globals.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ios.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Types.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4GlobalConfig.hh \
+ /usr/include/c++/11/complex \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -15,41 +20,8 @@ CMakeFiles/NuLat.dir/src/NuLatDetectorConstruction.cc.o: \
  /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/cpu_defines.h \
  /usr/include/c++/11/pstl/pstl_config.h \
- /usr/include/c++/11/bits/functexcept.h \
- /usr/include/c++/11/bits/exception_defines.h \
  /usr/include/c++/11/bits/cpp_type_traits.h \
- /usr/include/c++/11/ext/type_traits.h \
- /usr/include/c++/11/ext/numeric_traits.h \
- /usr/include/c++/11/bits/stl_pair.h /usr/include/c++/11/bits/move.h \
- /usr/include/c++/11/type_traits \
- /usr/include/c++/11/bits/stl_iterator_base_types.h \
- /usr/include/c++/11/bits/stl_iterator_base_funcs.h \
- /usr/include/c++/11/bits/concept_check.h \
- /usr/include/c++/11/debug/assertions.h \
- /usr/include/c++/11/bits/stl_iterator.h \
- /usr/include/c++/11/bits/ptr_traits.h /usr/include/c++/11/debug/debug.h \
- /usr/include/c++/11/bits/predefined_ops.h \
- /usr/include/c++/11/bits/allocator.h \
- /usr/include/x86_64-linux-gnu/c++/11/bits/c++allocator.h \
- /usr/include/c++/11/ext/new_allocator.h /usr/include/c++/11/new \
- /usr/include/c++/11/bits/exception.h \
- /usr/include/c++/11/bits/memoryfwd.h \
- /usr/include/c++/11/bits/stl_construct.h \
- /usr/include/c++/11/bits/stl_uninitialized.h \
- /usr/include/c++/11/ext/alloc_traits.h \
- /usr/include/c++/11/bits/alloc_traits.h \
- /usr/include/c++/11/bits/stl_vector.h \
- /usr/include/c++/11/initializer_list \
- /usr/include/c++/11/bits/stl_bvector.h \
- /usr/include/c++/11/bits/functional_hash.h \
- /usr/include/c++/11/bits/hash_bytes.h \
- /usr/include/c++/11/bits/range_access.h \
- /usr/include/c++/11/bits/vector.tcc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/globals.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ios.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Types.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4GlobalConfig.hh \
- /usr/include/c++/11/complex /usr/include/c++/11/cmath \
+ /usr/include/c++/11/ext/type_traits.h /usr/include/c++/11/cmath \
  /usr/include/math.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/x86_64-linux-gnu/bits/types.h \
@@ -95,7 +67,20 @@ CMakeFiles/NuLat.dir/src/NuLatDetectorConstruction.cc.o: \
  /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
  /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h /usr/include/alloca.h \
  /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
- /usr/include/c++/11/bits/specfun.h /usr/include/c++/11/limits \
+ /usr/include/c++/11/bits/specfun.h \
+ /usr/include/c++/11/bits/stl_algobase.h \
+ /usr/include/c++/11/bits/functexcept.h \
+ /usr/include/c++/11/bits/exception_defines.h \
+ /usr/include/c++/11/ext/numeric_traits.h \
+ /usr/include/c++/11/bits/stl_pair.h /usr/include/c++/11/bits/move.h \
+ /usr/include/c++/11/type_traits \
+ /usr/include/c++/11/bits/stl_iterator_base_types.h \
+ /usr/include/c++/11/bits/stl_iterator_base_funcs.h \
+ /usr/include/c++/11/bits/concept_check.h \
+ /usr/include/c++/11/debug/assertions.h \
+ /usr/include/c++/11/bits/stl_iterator.h \
+ /usr/include/c++/11/bits/ptr_traits.h /usr/include/c++/11/debug/debug.h \
+ /usr/include/c++/11/bits/predefined_ops.h /usr/include/c++/11/limits \
  /usr/include/c++/11/tr1/gamma.tcc \
  /usr/include/c++/11/tr1/special_function_util.h \
  /usr/include/c++/11/tr1/bessel_function.tcc \
@@ -110,17 +95,20 @@ CMakeFiles/NuLat.dir/src/NuLatDetectorConstruction.cc.o: \
  /usr/include/c++/11/tr1/riemann_zeta.tcc /usr/include/c++/11/sstream \
  /usr/include/c++/11/istream /usr/include/c++/11/ios \
  /usr/include/c++/11/iosfwd /usr/include/c++/11/bits/stringfwd.h \
- /usr/include/c++/11/bits/postypes.h /usr/include/c++/11/cwchar \
- /usr/include/wchar.h /usr/lib/gcc/x86_64-linux-gnu/11/include/stdarg.h \
+ /usr/include/c++/11/bits/memoryfwd.h /usr/include/c++/11/bits/postypes.h \
+ /usr/include/c++/11/cwchar /usr/include/wchar.h \
+ /usr/lib/gcc/x86_64-linux-gnu/11/include/stdarg.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h \
  /usr/include/x86_64-linux-gnu/bits/types/wint_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__FILE.h \
  /usr/include/x86_64-linux-gnu/bits/types/FILE.h \
- /usr/include/c++/11/exception /usr/include/c++/11/bits/exception_ptr.h \
+ /usr/include/c++/11/exception /usr/include/c++/11/bits/exception.h \
+ /usr/include/c++/11/bits/exception_ptr.h \
  /usr/include/c++/11/bits/cxxabi_init_exception.h \
- /usr/include/c++/11/typeinfo /usr/include/c++/11/bits/nested_exception.h \
+ /usr/include/c++/11/typeinfo /usr/include/c++/11/bits/hash_bytes.h \
+ /usr/include/c++/11/new /usr/include/c++/11/bits/nested_exception.h \
  /usr/include/c++/11/bits/char_traits.h /usr/include/c++/11/cstdint \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
@@ -146,11 +134,20 @@ CMakeFiles/NuLat.dir/src/NuLatDetectorConstruction.cc.o: \
  /usr/include/x86_64-linux-gnu/c++/11/bits/atomic_word.h \
  /usr/include/x86_64-linux-gnu/sys/single_threaded.h \
  /usr/include/c++/11/bits/locale_classes.h /usr/include/c++/11/string \
+ /usr/include/c++/11/bits/allocator.h \
+ /usr/include/x86_64-linux-gnu/c++/11/bits/c++allocator.h \
+ /usr/include/c++/11/ext/new_allocator.h \
  /usr/include/c++/11/bits/ostream_insert.h \
  /usr/include/c++/11/bits/cxxabi_forced.h \
  /usr/include/c++/11/bits/stl_function.h \
  /usr/include/c++/11/backward/binders.h \
- /usr/include/c++/11/bits/basic_string.h /usr/include/c++/11/string_view \
+ /usr/include/c++/11/bits/range_access.h \
+ /usr/include/c++/11/initializer_list \
+ /usr/include/c++/11/bits/basic_string.h \
+ /usr/include/c++/11/ext/alloc_traits.h \
+ /usr/include/c++/11/bits/alloc_traits.h \
+ /usr/include/c++/11/bits/stl_construct.h /usr/include/c++/11/string_view \
+ /usr/include/c++/11/bits/functional_hash.h \
  /usr/include/c++/11/bits/string_view.tcc \
  /usr/include/c++/11/ext/string_conversions.h /usr/include/c++/11/cstdlib \
  /usr/include/c++/11/cstdio /usr/include/stdio.h \
@@ -202,7 +199,11 @@ CMakeFiles/NuLat.dir/src/NuLatDetectorConstruction.cc.o: \
  /usr/include/c++/11/bits/enable_special_members.h \
  /usr/include/c++/11/bits/node_handle.h \
  /usr/include/c++/11/bits/unordered_map.h \
- /usr/include/c++/11/bits/erase_if.h \
+ /usr/include/c++/11/bits/erase_if.h /usr/include/c++/11/vector \
+ /usr/include/c++/11/bits/stl_uninitialized.h \
+ /usr/include/c++/11/bits/stl_vector.h \
+ /usr/include/c++/11/bits/stl_bvector.h \
+ /usr/include/c++/11/bits/vector.tcc \
  /usr/include/c++/11/pstl/execution_defs.h \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4String.hh \
  /usr/include/c++/11/cstring /usr/include/string.h /usr/include/strings.h \
@@ -235,31 +236,17 @@ CMakeFiles/NuLat.dir/src/NuLatDetectorConstruction.cc.o: \
  /usr/include/c++/11/bits/parse_numbers.h \
  /usr/include/c++/11/bits/std_mutex.h \
  /usr/include/c++/11/bits/unique_lock.h \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VPhysicalVolume.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/geomdefs.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4RotationMatrix.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VPrimaryGenerator.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ThreeVector.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/ThreeVector.h \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Utility/defs.h \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/ThreeVector.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/Rotation.h \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/RotationInterfaces.h \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/LorentzVector.h \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/LorentzVector.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/AxisAngle.h \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/AxisAngle.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/RotationInterfaces.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/RotationX.h \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/RotationX.icc \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ParticleDefinition.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Units/PhysicalConstants.h \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Units/SystemOfUnits.h \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/RotationY.h \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/RotationY.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/RotationZ.h \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/RotationZ.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/Rotation.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4GeomSplitter.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/geomwdefs.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4PDefManager.hh \
+ /usr/include/c++/11/stdlib.h \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/pwdefs.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4AutoLock.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Threading.hh \
  /usr/include/c++/11/condition_variable \
@@ -272,13 +259,86 @@ CMakeFiles/NuLat.dir/src/NuLatDetectorConstruction.cc.o: \
  /usr/include/c++/11/bits/atomic_futex.h \
  /usr/include/c++/11/bits/std_thread.h /usr/include/c++/11/thread \
  /usr/include/c++/11/bits/this_thread_sleep.h \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VPhysicalVolume.icc \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ParticleDefinition.icc \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4PrimaryVertex.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Allocator.hh \
+ /usr/include/c++/11/cstddef \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4AllocatorPool.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4PrimaryParticle.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ParticleMomentum.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4SystemOfUnits.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ParticleTable.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ParticleTableIterator.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ParticleTable.icc \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Geantino.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4IonTable.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ParticleTable.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Ions.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4RunManager.hh \
+ /usr/include/c++/11/list /usr/include/c++/11/bits/stl_list.h \
+ /usr/include/c++/11/bits/list.tcc \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/rundefs.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Event.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/evtdefs.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4HCofThisEvent.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VHitsCollection.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4DCofThisEvent.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VDigiCollection.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TrajectoryContainer.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VTrajectory.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VUserEventInformation.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Profiler.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Profiler.icc \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/PTL/Globals.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/PTL/Types.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/PTL/Utility.hh \
+ /usr/include/c++/11/set /usr/include/c++/11/bits/stl_set.h \
+ /usr/include/c++/11/bits/stl_multiset.h \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4EventManager.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4StackManager.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4UserStackingAction.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ClassificationOfNewTrack.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4StackedTrack.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TrackStack.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4SmartTrackStack.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Track.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/trkdefs.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4LogicalVolume.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Region.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4GeomSplitter.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/geomwdefs.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Region.icc \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VPhysicalVolume.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/geomdefs.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4RotationMatrix.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/Rotation.h \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/RotationInterfaces.h \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/LorentzVector.h \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/LorentzVector.icc \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/AxisAngle.h \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/AxisAngle.icc \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/RotationInterfaces.icc \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/RotationX.h \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/RotationX.icc \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/RotationY.h \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/RotationY.icc \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/RotationZ.h \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/RotationZ.icc \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/Rotation.icc \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VPhysicalVolume.icc \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4LogicalVolume.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4NistManager.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4DynamicParticle.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4LorentzVector.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Log.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ElectronOccupancy.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4DynamicParticle.icc \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TrackStatus.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TouchableHandle.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VTouchable.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VTouchable.icc \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ReferenceCountedHandle.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VUserTrackInformation.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4PhysicsModelCatalog.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Material.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Element.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Isotope.hh \
@@ -295,7 +355,6 @@ CMakeFiles/NuLat.dir/src/NuLatDetectorConstruction.cc.o: \
  /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
  /usr/include/c++/11/bits/fstream.tcc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Log.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4PhysicsVectorType.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4PhysicsVector.icc \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4IonisParamMat.hh \
@@ -306,162 +365,15 @@ CMakeFiles/NuLat.dir/src/NuLatDetectorConstruction.cc.o: \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4DataVector.icc \
  /usr/include/assert.h \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4MaterialTable.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4NistElementBuilder.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4NistMaterialBuilder.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ICRU90StoppingData.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Pow.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Exp.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4SystemOfUnits.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4PVPlacement.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Transform3D.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Geometry/Transform3D.h \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Geometry/Transform3D.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Geometry/Point3D.h \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Geometry/BasicVector3D.h \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Geometry/Vector3D.h \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Geometry/Normal3D.h \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4PVParameterised.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4PVReplica.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Box.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4GeomTypes.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4GeomConfig.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4CSGSolid.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VSolid.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VSolid.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Polyhedron.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/HepPolyhedron.h \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TwoVector.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/TwoVector.h \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Vector/TwoVector.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Point3D.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Normal3D.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Visible.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Visible.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Box.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Cons.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Cons.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Orb.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Orb.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Sphere.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Sphere.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Trd.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Trd.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Tubs.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Tubs.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4IntersectionSolid.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4BooleanSolid.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4DisplacedSolid.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4AffineTransform.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4AffineTransform.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4BooleanSolid.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4SubtractionSolid.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VSensitiveDetector.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VHit.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Track.icc \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Step.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4StepPoint.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Allocator.hh \
- /usr/include/c++/11/cstddef \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4AllocatorPool.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4SteppingControl.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4StepStatus.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TouchableHandle.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VTouchable.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VTouchable.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ReferenceCountedHandle.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4LogicalVolume.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4StepPoint.icc \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TrackVector.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Profiler.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Profiler.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/PTL/Globals.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/PTL/Types.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/PTL/Utility.hh \
- /usr/include/c++/11/set /usr/include/c++/11/bits/stl_set.h \
- /usr/include/c++/11/bits/stl_multiset.h \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Step.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Track.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/trkdefs.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4DynamicParticle.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ParticleDefinition.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4PDefManager.hh \
- /usr/include/c++/11/stdlib.h \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/pwdefs.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ParticleDefinition.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4LorentzVector.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ParticleMomentum.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ElectronOccupancy.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4DynamicParticle.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TrackStatus.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VUserTrackInformation.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4PhysicsModelCatalog.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Track.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4HCofThisEvent.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VHitsCollection.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VReadOutGeometry.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4SensitiveVolumeList.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TouchableHistory.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4NavigationHistory.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4NavigationLevel.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4NavigationLevelRep.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4NavigationLevelRep.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4NavigationLevel.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4NavigationHistoryPool.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4NavigationHistory.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TouchableHistory.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4CollectionNameVector.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VSDFilter.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4SDManager.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4SDStructure.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VSensitiveDetector.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4HCtable.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4OpticalSurface.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Physics2DVector.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Physics2DVector.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4SurfaceProperty.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4LogicalSkinSurface.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4LogicalSurface.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4LogicalSurface.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4LogicalSkinSurface.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4GenericMessenger.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4UImessenger.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4UIdirectory.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4UIcommand.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4UIparameter.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4UItokenNum.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ApplicationState.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4AnyType.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4AnyMethod.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VisAttributes.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/graphics_reps_defs.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Colour.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Color.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VisAttributes.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Colour.hh \
- /home/jack/Documents/geant4/NuLat/include/NuLatPMTsensitiveDetector.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4RunManager.hh \
- /usr/include/c++/11/list /usr/include/c++/11/bits/stl_list.h \
- /usr/include/c++/11/bits/list.tcc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/rundefs.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Event.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/evtdefs.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4PrimaryVertex.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4PrimaryParticle.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4DCofThisEvent.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VDigiCollection.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TrajectoryContainer.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VTrajectory.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VUserEventInformation.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4EventManager.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4StackManager.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4UserStackingAction.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ClassificationOfNewTrack.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4StackedTrack.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TrackStack.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4SmartTrackStack.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4PrimaryTransformer.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ParticleTable.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ParticleTableIterator.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ParticleTable.icc \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TrackingManager.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4SteppingManager.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/Randomize.hh \
@@ -518,12 +430,32 @@ CMakeFiles/NuLat.dir/src/NuLatDetectorConstruction.cc.o: \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Random/RandStudentT.h \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Random/RandStudentT.icc \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Navigator.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4AffineTransform.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Transform3D.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Geometry/Transform3D.h \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Geometry/Transform3D.icc \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Geometry/Point3D.h \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Geometry/BasicVector3D.h \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Geometry/Vector3D.h \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/CLHEP/Geometry/Normal3D.h \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4AffineTransform.icc \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4GRSVolume.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4GRSVolume.icc \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4GRSSolid.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4GRSSolid.icc \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TouchableHistoryHandle.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TouchableHistory.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4NavigationHistory.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4NavigationLevel.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4NavigationLevelRep.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4NavigationLevelRep.icc \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4NavigationLevel.icc \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4NavigationHistoryPool.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4NavigationHistory.icc \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TouchableHistory.icc \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4NormalNavigation.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VSolid.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VSolid.icc \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4AuxiliaryNavServices.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4AuxiliaryNavServices.icc \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4NormalNavigation.icc \
@@ -566,70 +498,11 @@ CMakeFiles/NuLat.dir/src/NuLatDetectorConstruction.cc.o: \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VSteppingVerbose.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/trkgdefs.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TrackingMessenger.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4UImessenger.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4UIdirectory.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4UIcommand.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4UIparameter.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4UItokenNum.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ApplicationState.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4UserTrackingAction.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4RunManagerKernel.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4AnalysisManager.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4GenericAnalysisManager.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ToolsAnalysisManager.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VAnalysisManager.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4AnalysisManagerState.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4AnalysisVerbose.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VTBaseHnManager.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4HnInformation.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4AnalysisUtilities.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4BinScheme.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Fcn.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VAnalysisManager.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4HnManager.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4BaseAnalysisManager.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4NtupleBookingManager.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/ntuple_booking \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/cids \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/cid \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/typedefs \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/forit \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4NtupleBookingManager.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VNtupleManager.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VFileManager.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4BaseFileManager.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VTHnFileManager.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TH1ToolsManager.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4THnToolsManager.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4THnManager.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4THnManager.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4THnMessenger.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4THnToolsManager.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4THnMessenger.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Tokenizer.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TH2ToolsManager.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TH3ToolsManager.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TP1ToolsManager.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TP2ToolsManager.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/h1d \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/h1 \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/b1 \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/base_histo \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/histo_data \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/axes \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/axis \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/eqT \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/h2d \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/h2 \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/b2 \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/h3d \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/h3 \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/b3 \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/p1d \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/p1 \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/profile_data \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/p2d \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/tools/histo/p2 \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4ToolsAnalysisManager.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4GenericAnalysisManager.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4GenericFileManager.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4GenericFileManager.icc \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TouchableHistory.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Track.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Step.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TrackingManager.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4EventManager.hh
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4RunManagerKernel.hh

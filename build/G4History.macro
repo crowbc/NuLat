@@ -1,0 +1,36 @@
+/run/verbose 2
+/control/execute vis.mac
+/control/verbose 2
+/vis/open OGL 800x600-0+0
+/vis/sceneHandler/create OGL
+/vis/viewer/create ! ! 800x600-0+0
+/vis/viewer/refresh
+/vis/viewer/set/autoRefresh false
+/vis/verbose errors
+/run/numberOfThreads 1
+/run/initialize
+/vis/drawVolume
+/vis/scene/create
+/vis/scene/add/volume world -1 -1 none m 0 0 0 0 0 0
+/vis/sceneHandler/attach
+/vis/viewer/set/viewpointVector 1 1 1
+/vis/viewer/set/style surface
+/vis/scene/add/scale 10 cm
+/vis/scene/notifyHandlers
+/vis/scene/add/axes 0 0 0 20. cm
+/vis/scene/notifyHandlers
+/vis/scene/add/trajectories smooth
+/tracking/storeTrajectory 2
+/vis/scene/notifyHandlers
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/scene/notifyHandlers scene-0
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+/vis/scene/notifyHandlers scene-0
+/vis/viewer/set/autoRefresh true
+/vis/viewer/refresh
+/vis/verbose warnings
+/run/beamOn 1
+/run/beamOn 1
+/analysis/h1/getVector
+/analysis/h2/getVector

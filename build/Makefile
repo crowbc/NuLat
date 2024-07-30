@@ -198,6 +198,30 @@ NuLat.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/NuLat.dir/build.make CMakeFiles/NuLat.dir/NuLat.cc.s
 .PHONY : NuLat.cc.s
 
+src/NuLatAction.o: src/NuLatAction.cc.o
+.PHONY : src/NuLatAction.o
+
+# target to build an object file
+src/NuLatAction.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NuLat.dir/build.make CMakeFiles/NuLat.dir/src/NuLatAction.cc.o
+.PHONY : src/NuLatAction.cc.o
+
+src/NuLatAction.i: src/NuLatAction.cc.i
+.PHONY : src/NuLatAction.i
+
+# target to preprocess a source file
+src/NuLatAction.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NuLat.dir/build.make CMakeFiles/NuLat.dir/src/NuLatAction.cc.i
+.PHONY : src/NuLatAction.cc.i
+
+src/NuLatAction.s: src/NuLatAction.cc.s
+.PHONY : src/NuLatAction.s
+
+# target to generate assembly for a file
+src/NuLatAction.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NuLat.dir/build.make CMakeFiles/NuLat.dir/src/NuLatAction.cc.s
+.PHONY : src/NuLatAction.cc.s
+
 src/NuLatDetectorConstruction.o: src/NuLatDetectorConstruction.cc.o
 .PHONY : src/NuLatDetectorConstruction.o
 
@@ -221,6 +245,54 @@ src/NuLatDetectorConstruction.s: src/NuLatDetectorConstruction.cc.s
 src/NuLatDetectorConstruction.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/NuLat.dir/build.make CMakeFiles/NuLat.dir/src/NuLatDetectorConstruction.cc.s
 .PHONY : src/NuLatDetectorConstruction.cc.s
+
+src/NuLatGenerator.o: src/NuLatGenerator.cc.o
+.PHONY : src/NuLatGenerator.o
+
+# target to build an object file
+src/NuLatGenerator.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NuLat.dir/build.make CMakeFiles/NuLat.dir/src/NuLatGenerator.cc.o
+.PHONY : src/NuLatGenerator.cc.o
+
+src/NuLatGenerator.i: src/NuLatGenerator.cc.i
+.PHONY : src/NuLatGenerator.i
+
+# target to preprocess a source file
+src/NuLatGenerator.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NuLat.dir/build.make CMakeFiles/NuLat.dir/src/NuLatGenerator.cc.i
+.PHONY : src/NuLatGenerator.cc.i
+
+src/NuLatGenerator.s: src/NuLatGenerator.cc.s
+.PHONY : src/NuLatGenerator.s
+
+# target to generate assembly for a file
+src/NuLatGenerator.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NuLat.dir/build.make CMakeFiles/NuLat.dir/src/NuLatGenerator.cc.s
+.PHONY : src/NuLatGenerator.cc.s
+
+src/NuLatPMTsensitiveDetector.o: src/NuLatPMTsensitiveDetector.cc.o
+.PHONY : src/NuLatPMTsensitiveDetector.o
+
+# target to build an object file
+src/NuLatPMTsensitiveDetector.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NuLat.dir/build.make CMakeFiles/NuLat.dir/src/NuLatPMTsensitiveDetector.cc.o
+.PHONY : src/NuLatPMTsensitiveDetector.cc.o
+
+src/NuLatPMTsensitiveDetector.i: src/NuLatPMTsensitiveDetector.cc.i
+.PHONY : src/NuLatPMTsensitiveDetector.i
+
+# target to preprocess a source file
+src/NuLatPMTsensitiveDetector.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NuLat.dir/build.make CMakeFiles/NuLat.dir/src/NuLatPMTsensitiveDetector.cc.i
+.PHONY : src/NuLatPMTsensitiveDetector.cc.i
+
+src/NuLatPMTsensitiveDetector.s: src/NuLatPMTsensitiveDetector.cc.s
+.PHONY : src/NuLatPMTsensitiveDetector.s
+
+# target to generate assembly for a file
+src/NuLatPMTsensitiveDetector.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NuLat.dir/build.make CMakeFiles/NuLat.dir/src/NuLatPMTsensitiveDetector.cc.s
+.PHONY : src/NuLatPMTsensitiveDetector.cc.s
 
 src/NuLatPhysics.o: src/NuLatPhysics.cc.o
 .PHONY : src/NuLatPhysics.o
@@ -246,6 +318,30 @@ src/NuLatPhysics.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/NuLat.dir/build.make CMakeFiles/NuLat.dir/src/NuLatPhysics.cc.s
 .PHONY : src/NuLatPhysics.cc.s
 
+src/NuLatRun.o: src/NuLatRun.cc.o
+.PHONY : src/NuLatRun.o
+
+# target to build an object file
+src/NuLatRun.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NuLat.dir/build.make CMakeFiles/NuLat.dir/src/NuLatRun.cc.o
+.PHONY : src/NuLatRun.cc.o
+
+src/NuLatRun.i: src/NuLatRun.cc.i
+.PHONY : src/NuLatRun.i
+
+# target to preprocess a source file
+src/NuLatRun.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NuLat.dir/build.make CMakeFiles/NuLat.dir/src/NuLatRun.cc.i
+.PHONY : src/NuLatRun.cc.i
+
+src/NuLatRun.s: src/NuLatRun.cc.s
+.PHONY : src/NuLatRun.s
+
+# target to generate assembly for a file
+src/NuLatRun.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NuLat.dir/build.make CMakeFiles/NuLat.dir/src/NuLatRun.cc.s
+.PHONY : src/NuLatRun.cc.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -262,12 +358,24 @@ help:
 	@echo "... NuLat.o"
 	@echo "... NuLat.i"
 	@echo "... NuLat.s"
+	@echo "... src/NuLatAction.o"
+	@echo "... src/NuLatAction.i"
+	@echo "... src/NuLatAction.s"
 	@echo "... src/NuLatDetectorConstruction.o"
 	@echo "... src/NuLatDetectorConstruction.i"
 	@echo "... src/NuLatDetectorConstruction.s"
+	@echo "... src/NuLatGenerator.o"
+	@echo "... src/NuLatGenerator.i"
+	@echo "... src/NuLatGenerator.s"
+	@echo "... src/NuLatPMTsensitiveDetector.o"
+	@echo "... src/NuLatPMTsensitiveDetector.i"
+	@echo "... src/NuLatPMTsensitiveDetector.s"
 	@echo "... src/NuLatPhysics.o"
 	@echo "... src/NuLatPhysics.i"
 	@echo "... src/NuLatPhysics.s"
+	@echo "... src/NuLatRun.o"
+	@echo "... src/NuLatRun.i"
+	@echo "... src/NuLatRun.s"
 .PHONY : help
 
 
