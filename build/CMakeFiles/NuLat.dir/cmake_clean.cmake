@@ -5,6 +5,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/NuLat.dir/src/NuLatAction.cc.o.d"
   "CMakeFiles/NuLat.dir/src/NuLatDetectorConstruction.cc.o"
   "CMakeFiles/NuLat.dir/src/NuLatDetectorConstruction.cc.o.d"
+  "CMakeFiles/NuLat.dir/src/NuLatEvent.cc.o"
+  "CMakeFiles/NuLat.dir/src/NuLatEvent.cc.o.d"
   "CMakeFiles/NuLat.dir/src/NuLatGenerator.cc.o"
   "CMakeFiles/NuLat.dir/src/NuLatGenerator.cc.o.d"
   "CMakeFiles/NuLat.dir/src/NuLatPMTsensitiveDetector.cc.o"

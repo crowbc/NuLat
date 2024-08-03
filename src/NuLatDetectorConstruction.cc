@@ -14,6 +14,7 @@ NuLatDetectorConstruction::NuLatDetectorConstruction()
 	xVoxelSpace = 0.005*in;
 	yVoxelSpace = 0.005*in;
 	zVoxelSpace = 0.005*in;
+	// take half-thickness as 1/16th of an inch. Use half-thickness in calculations
 	tAcrylicPanel = 0.0625*in;
 	lenPMT = 200.*mm;
 	lenLGTaper = 35.*mm;
@@ -27,7 +28,7 @@ NuLatDetectorConstruction::NuLatDetectorConstruction()
 	xWorld = 2*xVCBoxSize;
 	yWorld = 2*yVCBoxSize;
 	zWorld = 2*zVCBoxSize;
-	// Define the messenger and declare properties
+	// Define the messenger and declare properties - for now only number of cubes can be varied.
 	fMessenger = new G4GenericMessenger(this, "/detector/", "Detector Construction");// TODO: set up /voxel and other subdirectories
 	fMessenger->DeclareProperty("xVoxels", xVoxels, "Number of voxels (cubes) in the x-dimension");
 	fMessenger->DeclareProperty("yVoxels", yVoxels, "Number of voxels (cubes) in the y-dimension");
@@ -370,10 +371,10 @@ G4VPhysicalVolume* NuLatDetectorConstruction::Construct()
 void NuLatDetectorConstruction::ConstructSDandField()
 {
 	// Get SDM pointer for creating new detectors
-	//G4SDManager *SDman = G4SDManager::GetSDMpointer();
+	G4SDManager *SDman = G4SDManager::GetSDMpointer();
 	// Define PMT's as sensitive volumes
 	detPMT = new NuLatPMTSensitiveDetector("/NuLatPMT", xVoxels, yVoxels, zVoxels);
-	//SDman->AddNewDetector(detPMT);
+	SDman->AddNewDetector(detPMT);
 	logicPMT->SetSensitiveDetector(detPMT);
 	// Define Voxels as sensitive volumes
 	/*detVoxel = new NuLatVoxelSensitiveDetector("/NuLatVoxel", xVoxels, yVoxels, zVoxels);

@@ -246,6 +246,30 @@ src/NuLatDetectorConstruction.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/NuLat.dir/build.make CMakeFiles/NuLat.dir/src/NuLatDetectorConstruction.cc.s
 .PHONY : src/NuLatDetectorConstruction.cc.s
 
+src/NuLatEvent.o: src/NuLatEvent.cc.o
+.PHONY : src/NuLatEvent.o
+
+# target to build an object file
+src/NuLatEvent.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NuLat.dir/build.make CMakeFiles/NuLat.dir/src/NuLatEvent.cc.o
+.PHONY : src/NuLatEvent.cc.o
+
+src/NuLatEvent.i: src/NuLatEvent.cc.i
+.PHONY : src/NuLatEvent.i
+
+# target to preprocess a source file
+src/NuLatEvent.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NuLat.dir/build.make CMakeFiles/NuLat.dir/src/NuLatEvent.cc.i
+.PHONY : src/NuLatEvent.cc.i
+
+src/NuLatEvent.s: src/NuLatEvent.cc.s
+.PHONY : src/NuLatEvent.s
+
+# target to generate assembly for a file
+src/NuLatEvent.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NuLat.dir/build.make CMakeFiles/NuLat.dir/src/NuLatEvent.cc.s
+.PHONY : src/NuLatEvent.cc.s
+
 src/NuLatGenerator.o: src/NuLatGenerator.cc.o
 .PHONY : src/NuLatGenerator.o
 
@@ -364,6 +388,9 @@ help:
 	@echo "... src/NuLatDetectorConstruction.o"
 	@echo "... src/NuLatDetectorConstruction.i"
 	@echo "... src/NuLatDetectorConstruction.s"
+	@echo "... src/NuLatEvent.o"
+	@echo "... src/NuLatEvent.i"
+	@echo "... src/NuLatEvent.s"
 	@echo "... src/NuLatGenerator.o"
 	@echo "... src/NuLatGenerator.i"
 	@echo "... src/NuLatGenerator.s"

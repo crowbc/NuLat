@@ -35,7 +35,7 @@
 /vis/scene/add/axes 0 0 0 20. cm
 #
 # Show Event ID (for debugging purposes)
-#/vis/scene/add/eventID
+/vis/scene/add/eventID
 #
 # Draw smooth trajectories at end of event, showing trajectory points as markers 2 pixels wide:
 /vis/scene/add/trajectories smooth

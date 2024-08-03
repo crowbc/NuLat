@@ -19,10 +19,10 @@ G4bool NuLatPMTSensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory 
 	G4Track *track = aStep->GetTrack();
 	pName = track->GetDefinition()->GetParticleName();
 	pID = ParticleNameToIDNumber(pName);
-	// only do this for optical photons to simulate the regime where the PMT is actually sensitve - note this will be tracked when PMT processes are simulated
+	// only do this for optical photons to simulate the regime where the PMT is actually sensitve
 	if (pID == 100)
 	{
-		track->SetTrackStatus(fStopAndKill);// not necessary when PMT processes are simulated
+		track->SetTrackStatus(fStopAndKill);
 		// set up step points. Get true photon position of PMT hit
 		G4StepPoint *preStepPoint = aStep->GetPreStepPoint();
 		G4StepPoint *postStepPoint = aStep->GetPostStepPoint();
@@ -37,14 +37,14 @@ G4bool NuLatPMTSensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory 
 		pZ0 = momPhoton[2];
 		// Calculates wavelength in nm (change constant to change unit order of magnitude)
 		wlen = HCNM/momPhoton.mag();
-		// Debug Print if enabled -- relevant info should be in hit class TODO: find a more efficient way to do this than using conditionals
+		// Debug Print if enabled -- TODO: find a more efficient way to do this rather than using conditionals
 		/*if(debugMsg){
 			G4cout << "Photon position: " << posPhoton << "; Photon wavelength: " << wlen << " nm" << G4endl;
 		}/**/
 		// Get index of hit PMT
 		const G4VTouchable *touch = aStep->GetPreStepPoint()->GetTouchable();
 		fID = touch->GetCopyNumber();
-		// Debug Print if enabled -- relevant info should be in hit class TODO: find a more efficient way to do this than using conditionals
+		// Debug Print if enabled
 		/*if(debugMsg)
 		{
 			G4cout << "Copy number: " << fID << G4endl;
@@ -56,7 +56,7 @@ G4bool NuLatPMTSensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory 
 		fY = posDet[1];
 		fZ = posDet[2];
 		fT = aStep->GetTrack()->GetGlobalTime();
-		// Debug Print if enabled -- relevant info should be in hit class
+		// Debug Print if enabled
 		/*if(debugMsg){
 			G4cout << "Detector position: " << posDet << G4endl;
 		}/**/
@@ -65,7 +65,7 @@ G4bool NuLatPMTSensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory 
 		// Get event number
 		fEvt = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
 		// Fill Ntuple columns with photon information - to do: move this function to event manager after storing hit information in vectors
-		/*Aman->FillNtupleIColumn(0, 0, fEvt);
+		Aman->FillNtupleIColumn(0, 0, fEvt);
 		Aman->FillNtupleDColumn(0, 1, xpos);
 		Aman->FillNtupleDColumn(0, 2, ypos);
 		Aman->FillNtupleDColumn(0, 3, zpos);
@@ -81,7 +81,7 @@ G4bool NuLatPMTSensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory 
 			Aman->FillNtupleDColumn(1, 4, fZ);
 			Aman->FillNtupleDColumn(1, 5, fT);
 			Aman->AddNtupleRow(1);
-		}/**/
+		}
 	}
 	// return value
 	return true;

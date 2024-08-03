@@ -9,6 +9,7 @@
 #include "G4AnalysisManager.hh"
 #include "G4TrackingManager.hh"
 #include "G4VTrajectory.hh"
+//#include "G4RunManager.hh"
 // user defined header files
 #include "NuLatRun.hh"
 //#include "NuLatVoxelHit.hh"

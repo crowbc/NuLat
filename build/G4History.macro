@@ -19,6 +19,8 @@
 /vis/scene/notifyHandlers
 /vis/scene/add/axes 0 0 0 20. cm
 /vis/scene/notifyHandlers
+/vis/scene/add/eventID
+/vis/scene/notifyHandlers
 /vis/scene/add/trajectories smooth
 /tracking/storeTrajectory 2
 /vis/scene/notifyHandlers
@@ -30,7 +32,9 @@
 /vis/viewer/set/autoRefresh true
 /vis/viewer/refresh
 /vis/verbose warnings
-/run/beamOn 1
+/run/beamOn
+/analysis/h1/getVector
+/analysis/h2/getVector
 /run/beamOn 1
 /analysis/h1/getVector
 /analysis/h2/getVector

@@ -1,9 +1,9 @@
 /*
 	File: Nulat.cc
 	Author: Brian Crow
-	Date: 17JUL2024
+	Date: XXAUG2024
 	Description: This code is for the NuLat detector simulation, which can run in batch mode with multithread run support, or in interactive mode. See README for notes, and change log.
-	Version: 1.0.0 Initial Commit
+	Version: 1.1.1 Event Manager Added
 */
 // Included C++ libraries
 #include <iostream>

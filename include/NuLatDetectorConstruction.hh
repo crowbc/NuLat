@@ -81,7 +81,7 @@ private:
 	const G4double wlmax_EJ200 = 425*nm;
 	const G4double fwhm_EJ200 = 2.5*ns;
 	// EJ200 light attenuation length, refractive index, C atom number density, H atom number density and electon number density:
-	const G4double aLenConst_EJ200 = 380.*cm;
+	const G4double aLenConst_EJ200 = 380.*cm;// note in Yokley (2106) -- best fit attenuation length is 93 cm (p. 131) or 113 cm (p. 134)
 	const G4double rindexConst_EJ200 = 1.58;
 	const G4double nH_EJ200 = 5.17E22/cm3;
 	const G4double nC_EJ200 = 4.69E22/cm3;

@@ -19,10 +19,10 @@ void NuLatActionInitialization::Build() const
 	NuLatPrimaryGenerator *generator = new NuLatPrimaryGenerator();
 	SetUserAction(generator);
 	// Run Action
-	/*NuLatRunAction *runAction = new NuLatRunAction();
+	NuLatRunAction *runAction = new NuLatRunAction();
 	SetUserAction(runAction);
 	// Event Action
-	NuLatEventAction *eventAction = new NuLatEventAction(runAction);
+	/*NuLatEventAction *eventAction = new NuLatEventAction(runAction);
 	SetUserAction(eventAction);
 	// Stepping Action
 	/*NuLatSteppingAction *steppingAction = new NuLatSteppingAction(eventAction);
