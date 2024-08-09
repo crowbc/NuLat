@@ -16,6 +16,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/jack/Documents/geant4/NuLat/src/NuLatPMTsensitiveDetector.cc" "CMakeFiles/NuLat.dir/src/NuLatPMTsensitiveDetector.cc.o" "gcc" "CMakeFiles/NuLat.dir/src/NuLatPMTsensitiveDetector.cc.o.d"
   "/home/jack/Documents/geant4/NuLat/src/NuLatPhysics.cc" "CMakeFiles/NuLat.dir/src/NuLatPhysics.cc.o" "gcc" "CMakeFiles/NuLat.dir/src/NuLatPhysics.cc.o.d"
   "/home/jack/Documents/geant4/NuLat/src/NuLatRun.cc" "CMakeFiles/NuLat.dir/src/NuLatRun.cc.o" "gcc" "CMakeFiles/NuLat.dir/src/NuLatRun.cc.o.d"
+  "/home/jack/Documents/geant4/NuLat/src/NuLatVoxelSensitiveDetector.cc" "CMakeFiles/NuLat.dir/src/NuLatVoxelSensitiveDetector.cc.o" "gcc" "CMakeFiles/NuLat.dir/src/NuLatVoxelSensitiveDetector.cc.o.d"
   )
 
 # Targets to which this target links.

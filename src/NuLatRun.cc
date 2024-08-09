@@ -48,6 +48,7 @@ NuLatRunAction::NuLatRunAction()
 	Aman->CreateNtupleDColumn("fPX0");// col 10
 	Aman->CreateNtupleDColumn("fPY0");// col 11
 	Aman->CreateNtupleDColumn("fPZ0");// col 12
+	Aman->CreateNtupleDColumn("fPmag");// col 13
 	Aman->FinishNtuple(2);
 	// TODO: get trajectory info stored in Ntuple
 }

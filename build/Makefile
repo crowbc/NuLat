@@ -366,6 +366,30 @@ src/NuLatRun.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/NuLat.dir/build.make CMakeFiles/NuLat.dir/src/NuLatRun.cc.s
 .PHONY : src/NuLatRun.cc.s
 
+src/NuLatVoxelSensitiveDetector.o: src/NuLatVoxelSensitiveDetector.cc.o
+.PHONY : src/NuLatVoxelSensitiveDetector.o
+
+# target to build an object file
+src/NuLatVoxelSensitiveDetector.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NuLat.dir/build.make CMakeFiles/NuLat.dir/src/NuLatVoxelSensitiveDetector.cc.o
+.PHONY : src/NuLatVoxelSensitiveDetector.cc.o
+
+src/NuLatVoxelSensitiveDetector.i: src/NuLatVoxelSensitiveDetector.cc.i
+.PHONY : src/NuLatVoxelSensitiveDetector.i
+
+# target to preprocess a source file
+src/NuLatVoxelSensitiveDetector.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NuLat.dir/build.make CMakeFiles/NuLat.dir/src/NuLatVoxelSensitiveDetector.cc.i
+.PHONY : src/NuLatVoxelSensitiveDetector.cc.i
+
+src/NuLatVoxelSensitiveDetector.s: src/NuLatVoxelSensitiveDetector.cc.s
+.PHONY : src/NuLatVoxelSensitiveDetector.s
+
+# target to generate assembly for a file
+src/NuLatVoxelSensitiveDetector.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NuLat.dir/build.make CMakeFiles/NuLat.dir/src/NuLatVoxelSensitiveDetector.cc.s
+.PHONY : src/NuLatVoxelSensitiveDetector.cc.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -403,6 +427,9 @@ help:
 	@echo "... src/NuLatRun.o"
 	@echo "... src/NuLatRun.i"
 	@echo "... src/NuLatRun.s"
+	@echo "... src/NuLatVoxelSensitiveDetector.o"
+	@echo "... src/NuLatVoxelSensitiveDetector.i"
+	@echo "... src/NuLatVoxelSensitiveDetector.s"
 .PHONY : help
 
 

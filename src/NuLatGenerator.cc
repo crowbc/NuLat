@@ -15,8 +15,11 @@ NuLatPrimaryGenerator::NuLatPrimaryGenerator()
 	energy = 0.*MeV;
 	// Place source on +z face of NaI detector. Set initial momentum straight into the NuLat detector.
 	G4ThreeVector pos(0.,0.,-6.25*in-207.5*mm);
-	// Initial momentum straight into detector. Set on random cone into the detector from GeneratePrimaries()
-	G4ThreeVector mom(0.,0.,1.);
+	// Initial momentum on random cone into the detector from approximately 20 cm away, centered on the -z face
+	// note: to be truly uniform in theta, must use inverse cosine of random number between 1 and cos(cone_angle) -- however, this is close enough for small values of cone_angle
+	theta = G4UniformRand()*cone_angle;
+	phi = G4UniformRand()*360*deg;
+	G4ThreeVector mom(sin(theta)*cos(phi),sin(theta)*sin(phi),cos(theta));
 	// set particle gun properties
 	G4double eCo60Lo = 1.173*MeV;// deprecated (Z = 27, A = 60 for this source)
 	G4double eCo60Hi = 1.332*MeV;// deprecated (Z = 27, A = 60 for this source)
@@ -61,13 +64,13 @@ NuLatPrimaryGenerator::~NuLatPrimaryGenerator()
 // GeneratePrimaries()
 void NuLatPrimaryGenerator::GeneratePrimaries(G4Event *NuLatEvent)
 {
-	G4ParticleDefinition *particle = fParticleGun->GetParticleDefinition();
-	// to be truly uniform in theta, must use inverse cosine of random number between 1 and cos(gamma) -- this is close enough for small values of gamma
-	theta = G4UniformRand()*cone_angle;
+	//G4ParticleDefinition *particle = fParticleGun->GetParticleDefinition();
+	// to be truly uniform in theta, must use inverse cosine of random number between 1 and cos(cone_angle) -- this is close enough for small values of gamma
+	/*theta = G4UniformRand()*cone_angle;
 	phi = G4UniformRand()*360*deg;
 	G4ThreeVector mom(sin(theta)*cos(phi),sin(theta)*sin(phi),cos(theta));
 	// Use Randomly Generated Momentum Direction
-	fParticleGun->SetParticleMomentumDirection(mom);
+	fParticleGun->SetParticleMomentumDirection(mom);/**/
 	// generate vertex
 	fParticleGun->GeneratePrimaryVertex(NuLatEvent);
 }

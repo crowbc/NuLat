@@ -6,6 +6,9 @@ Initial build for testing geometry and materials properties, physics of detector
 
 Change log (in reverse chronological order starting from most recent version:)
 
+v 1.2.0 -- 08AUG2024: PMT Lens and Scoring Volume Update
+	Changed the absorption length for EJ-200 from the value listed in the product information sheet from Eljen in order to reflect the work done in Yokley. Changed the particle generator to a random cone into the detector from approximately 20 cm behind the center of the -z face. Added PMT lenses to simulate reflections at the boundary between the light guides and PMTs. Added Voxel Sensitive Detector class NuLatVoxelSensitiveDetector.hh and MC truth N-tuple for energy depositions and particle momenta.
+
 v 1.1.1 -- 02AUG2024
 	Added Event manager class using G4 analysis manager. Added ntuples for ROOT output file.
 	

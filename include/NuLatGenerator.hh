@@ -21,8 +21,8 @@ private:
 	G4ParticleGun* fParticleGun;
 	// useful constants
 	const G4double in = 25.4*mm;
-	// constant for cone geometry, equal to 1st quadrant branch of tan^-1(158.8mm/207.5mm)
-	const G4double cone_angle = 37.4*deg;
+	// constant for cone geometry, equal to 1st quadrant branch of tan^-1(158.8mm/401.0mm)
+	const G4double cone_angle = 21.6*deg;
 	// variables for randomized direction
 	G4double theta, phi;
 	// variables for particle properties

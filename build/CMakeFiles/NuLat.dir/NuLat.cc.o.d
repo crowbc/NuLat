@@ -764,6 +764,8 @@ CMakeFiles/NuLat.dir/NuLat.cc.o: \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Step.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4TrackingManager.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4EventManager.hh \
+ /home/jack/Documents/geant4/NuLat/include/NuLatVoxelSensitiveDetector.hh \
+ /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4HCofThisEvent.hh \
  /home/jack/Documents/geant4/NuLat/include/NuLatPhysics.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VModularPhysicsList.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VPhysicsConstructor.hh \
@@ -838,5 +840,4 @@ CMakeFiles/NuLat.dir/NuLat.cc.o: \
  /home/jack/Documents/geant4/NuLat/include/NuLatEvent.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4UserEventAction.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4Event.hh \
- /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4HCofThisEvent.hh \
  /opt/applications/geant4/geant4-v11.1.0-install/include/Geant4/G4VTrajectory.hh

@@ -9,7 +9,7 @@ NuLatActionInitialization::~NuLatActionInitialization()
 void NuLatActionInitialization::BuildForMaster() const
 {
 	// Do only Run Action for Master Thread
-	/*NuLatRunAction *runAction = new NuLatRunAction();
+	NuLatRunAction *runAction = new NuLatRunAction();
 	SetUserAction(runAction);/**/
 }
 // build function
@@ -22,7 +22,7 @@ void NuLatActionInitialization::Build() const
 	NuLatRunAction *runAction = new NuLatRunAction();
 	SetUserAction(runAction);
 	// Event Action
-	/*NuLatEventAction *eventAction = new NuLatEventAction(runAction);
+	NuLatEventAction *eventAction = new NuLatEventAction(runAction);
 	SetUserAction(eventAction);
 	// Stepping Action
 	/*NuLatSteppingAction *steppingAction = new NuLatSteppingAction(eventAction);

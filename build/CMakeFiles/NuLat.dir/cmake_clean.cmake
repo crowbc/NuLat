@@ -15,6 +15,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/NuLat.dir/src/NuLatPhysics.cc.o.d"
   "CMakeFiles/NuLat.dir/src/NuLatRun.cc.o"
   "CMakeFiles/NuLat.dir/src/NuLatRun.cc.o.d"
+  "CMakeFiles/NuLat.dir/src/NuLatVoxelSensitiveDetector.cc.o"
+  "CMakeFiles/NuLat.dir/src/NuLatVoxelSensitiveDetector.cc.o.d"
   "NuLat"
   "NuLat.pdb"
 )

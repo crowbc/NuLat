@@ -16,10 +16,15 @@ NuLatDetectorConstruction::NuLatDetectorConstruction()
 	zVoxelSpace = 0.005*in;
 	// take half-thickness as 1/16th of an inch. Use half-thickness in calculations
 	tAcrylicPanel = 0.0625*in;
+	// PMT and Light Guide dimensions
 	lenPMT = 200.*mm;
 	lenLGTaper = 35.*mm;
 	lenLGSqu = 5.*mm;
 	lenLGwPMT = lenPMT+lenLGTaper+lenLGSqu;
+	tGlass = 4*mm;
+	rPMT = 23*mm;
+	rSpherePMTsurf = 529.25*mm;
+	tGlass_min = 0.8*mm;
 	// calorimeter size
 	xVCBoxSize = xVoxels*(xVoxelSize+xVoxelSpace)+xVoxelSpace;
 	yVCBoxSize = yVoxels*(yVoxelSize+yVoxelSpace)+yVoxelSpace;
@@ -99,7 +104,7 @@ void NuLatDetectorConstruction::DefineMaterials()
 	// PMT material properties variables (including Mu-metal surface properties)
 	G4double reflMuMetal[nI], effMuMetal[nI], specularLopeMuMetal[nI], specularSpikeMuMetal[nI], backscatterMuMetal[nI];
 	G4double rindexBeCuPhotoCath[nI], aLenBeCuPhotoCath[nI];
-	G4double rindexBorosilicateGlass[nI], aLenBorosilicateGlass[nI];
+	G4double rindex_BorosilicateGlass[nI], aLen_BorosilicateGlass[nI];
 	// Define Elements
 	H = nist->FindOrBuildElement("H");
 	Be = nist->FindOrBuildElement("Be");
@@ -124,6 +129,9 @@ void NuLatDetectorConstruction::DefineMaterials()
 	aluminum = nist->FindOrBuildMaterial("G4_Al");
 	stainless = nist->FindOrBuildMaterial("G4_STAINLESS-STEEL");
 	lead = nist->FindOrBuildMaterial("G4_Pb");
+	borosilicateGlass = new G4Material("borosilicateGlass", rho_BorosilicateGlass, 2);
+	borosilicateGlass->AddElement(Si, 1);
+	borosilicateGlass->AddElement(O, 2);
 	// Set Material Properties
 	for (size_t i = 0; i<nI; i++){
 		// Calculate wavelength (in nm) from photon energy
@@ -136,6 +144,8 @@ void NuLatDetectorConstruction::DefineMaterials()
 		aLen_EJ200[i] = aLenConst_EJ200;
 		reflectivity_Al[i] = refConst_Al;
 		reflectivity_SS[i] = refConst_SS;
+		rindex_BorosilicateGlass[i] = rindexConst_BorosilicateGlass;
+		aLen_BorosilicateGlass[i] = aLenConst_BorosilicateGlass;
 		//G4out << "physical parameters: EJ-200 specular component: " << sc_EJ200[i] << G4endl;// uncomment if debug feedback is needed
 	}
 	//G4out << "refractive indices, absorption lengths and reflectivities are all assumed constant for this simulation." << G4endl;
@@ -163,6 +173,10 @@ void NuLatDetectorConstruction::DefineMaterials()
 	mpt_SS = new G4MaterialPropertiesTable();
 	mpt_SS->AddProperty("REFLECTIVITY", photonEnergy, reflectivity_SS, nI);
 	stainless->SetMaterialPropertiesTable(mpt_SS);
+	mpt_BorosilicateGlass = new G4MaterialPropertiesTable();
+	mpt_BorosilicateGlass->AddProperty("RINDEX", photonEnergy, rindex_BorosilicateGlass, nI);
+	mpt_BorosilicateGlass->AddProperty("ABSLENGTH", photonEnergy, aLen_BorosilicateGlass, nI);
+	borosilicateGlass->SetMaterialPropertiesTable(mpt_BorosilicateGlass);
 	// optical surface properties
 	surface_Al = new G4OpticalSurface("surface_Al");
 	surface_Al->SetType(dielectric_metal);
@@ -196,7 +210,7 @@ void NuLatDetectorConstruction::BuildVCBox()
 	logicVoxel->SetVisAttributes(attr);
 	// Set NuLat voxel as NuLat scoring volume
 	fNuLatScoringVolume = logicVoxel;
-	// for loop to create 5X5X5 array of Voxel Physical Volumes
+	// for loop to create xVoxels X yVoxels X zVoxels array of Voxel Physical Volumes
 	for(G4int k=0; k<zVoxels; k++)
 	{
 		zPos = (k+1.)*zVoxelSpace+(k+0.5)*zVoxelSize-zVCBoxSize/2;
@@ -224,7 +238,7 @@ void NuLatDetectorConstruction::BuildAcrylicBox()
 	logicAcrylicBox->SetVisAttributes(attr);
 	physAcrylicBox = new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), logicAcrylicBox, "physAcrylicBox", logicWorld, false, 0, true);
 }
-//  Light Guide with PMT constructor -- TODO: add stainless steel PMT supports
+//  Light Guide with PMT constructor -- TODO: add stainless steel PMT supports, add Borosilicate glass boundaries
 void NuLatDetectorConstruction::BuildLGandPMT()
 {
 	// Define Visual Attributes object for adjusting coloring and visibility of various components
@@ -263,7 +277,7 @@ void NuLatDetectorConstruction::BuildLGandPMT()
 	attr = new G4VisAttributes(G4Colour(0.5,0.5,0.5,0.5));
 	logicSSPMTPlate->SetVisAttributes(attr);/**/
 	// make +z light guides
-	zPos = zVCBoxSize/2+2*tAcrylicPanel+dz/2;
+	zPos = zVCBoxSize/2+tAcrylicPanel+dz/2;
 	for (G4int i=0; i<xVoxels; i++)
 	{
 		xPos = -xVCBoxSize/2+i*(xVoxelSize+xVoxelSpace)+xVoxelSpace+xVoxelSize/2;
@@ -274,7 +288,7 @@ void NuLatDetectorConstruction::BuildLGandPMT()
 		}
 	}
 	// make +x light guides
-	xPos = xVCBoxSize/2+2*tAcrylicPanel+dz/2;
+	xPos = xVCBoxSize/2+tAcrylicPanel+dz/2;
 	for (G4int i=0; i<yVoxels; i++)
 	{
 		yPos = -yVCBoxSize/2+i*(yVoxelSize+yVoxelSpace)+yVoxelSpace+yVoxelSize/2;
@@ -285,7 +299,7 @@ void NuLatDetectorConstruction::BuildLGandPMT()
 		}
 	}
 	// make -y light guides
-	yPos = -yVCBoxSize/2-2*tAcrylicPanel-dz/2;
+	yPos = -yVCBoxSize/2-tAcrylicPanel-dz/2;
 	for (G4int i=0; i<xVoxels; i++)
 	{
 		xPos = -xVCBoxSize/2+i*(xVoxelSize+xVoxelSpace)+xVoxelSpace+xVoxelSize/2;
@@ -295,43 +309,55 @@ void NuLatDetectorConstruction::BuildLGandPMT()
 			physLG = new G4PVPlacement(yRot, G4ThreeVector(xPos, yPos, zPos), logicLG, "physLG", logicWorld, false, i*zVoxels+j+xVoxels*yVoxels+yVoxels*zVoxels, true);
 		}
 	}
-	// Define PMT's
+	// Define Borosilicate Glass boundaries
+	solidPMTGlass = new G4Tubs("solidPMTGlass", 0, rPMT, tGlass/2, 0, 360.*deg);
+	solidPMTconvex = new G4Sphere("solidPMTconvex" , 0, rSpherePMTsurf, 0, 360.*deg, 0, 360.*deg);
+	// Define PMT Lens (to simulate reflections at PMT/LG boundary)
+	solidPMTLens = new G4SubtractionSolid("solidPMTLens", solidPMTGlass, solidPMTconvex, 0, G4ThreeVector(0,0,rSpherePMTsurf-tGlass/2+tGlass_min));
+	logicPMTLens = new G4LogicalVolume(solidPMTLens, borosilicateGlass, "logicPMTLens");
+	// make lenses magenta
+	attr = new G4VisAttributes(G4Colour(0.3,0.0,0.2,0.4));
+	logicPMTLens->SetVisAttributes(attr);
+	// Define "PMT's"
 	solidPMT = new G4Tubs("solidPMT", 0, r2, lenPMT/2, 0, 360*deg);
 	logicPMT = new G4LogicalVolume(solidPMT, air, "logicPMT");
 	// make PMT volumes purple cylinders
 	attr = new G4VisAttributes(G4Colour(0.5,0.0,0.5,0.5));
 	logicPMT->SetVisAttributes(attr);
-	// make +z PMT's
-	zPos = zVCBoxSize/2+2*tAcrylicPanel+dz+lenPMT/2;
+	// make +z "PMT's" and lenses
+	zPos = zVCBoxSize/2+tAcrylicPanel+dz+tGlass/2;
 	for (G4int i=0; i<xVoxels; i++)
 	{
 		xPos = -xVCBoxSize/2+i*(xVoxelSize+xVoxelSpace)+xVoxelSpace+xVoxelSize/2;
 		for(G4int j=0; j<yVoxels; j++)
 		{
 			yPos = -yVCBoxSize/2+j*(yVoxelSize+yVoxelSpace)+yVoxelSpace+yVoxelSize/2;
-			physPMT = new G4PVPlacement(0, G4ThreeVector(xPos, yPos, zPos), logicPMT, "physPMT", logicWorld, false, i*yVoxels+j, true);
+			physPMTLens = new G4PVPlacement(0, G4ThreeVector(xPos, yPos, zPos), logicPMTLens, "physPMTLens", logicWorld, false, i*yVoxels+j, true);
+			physPMT = new G4PVPlacement(0, G4ThreeVector(xPos, yPos, zPos+lenPMT/2), logicPMT, "physPMT", logicWorld, false, i*yVoxels+j, true);
 		}
 	}
-	// make +x PMT's
-	xPos = xVCBoxSize/2+2*tAcrylicPanel+dz+lenPMT/2;
+	// make +x "PMT's" and lenses
+	xPos = xVCBoxSize/2+2*tAcrylicPanel+dz+tGlass/2;
 	for (G4int i=0; i<yVoxels; i++)
 	{
 		yPos = -yVCBoxSize/2+i*(yVoxelSize+yVoxelSpace)+yVoxelSpace+yVoxelSize/2;
 		for(G4int j=0; j<zVoxels; j++)
 		{
 			zPos = -zVCBoxSize/2+j*(zVoxelSize+zVoxelSpace)+zVoxelSpace+zVoxelSize/2;
-			physPMT = new G4PVPlacement(xRot, G4ThreeVector(xPos, yPos, zPos), logicPMT, "physPMT", logicWorld, false, i*zVoxels+j+xVoxels*yVoxels, true);
+			physPMTLens = new G4PVPlacement(xRot, G4ThreeVector(xPos, yPos, zPos), logicPMTLens, "physPMTLens", logicWorld, false, i*zVoxels+j+xVoxels*yVoxels, true);
+			physPMT = new G4PVPlacement(xRot, G4ThreeVector(xPos+lenPMT/2, yPos, zPos), logicPMT, "physPMT", logicWorld, false, i*zVoxels+j+xVoxels*yVoxels, true);
 		}
 	}
-	// make -y PMT's
-	yPos = -yVCBoxSize/2-2*tAcrylicPanel-dz-lenPMT/2;
+	// make -y "PMT's" and lenses
+	yPos = -yVCBoxSize/2-tAcrylicPanel-dz-tGlass/2;
 	for (G4int i=0; i<xVoxels; i++)
 	{
 		xPos = -xVCBoxSize/2+i*(xVoxelSize+xVoxelSpace)+xVoxelSpace+xVoxelSize/2;
 		for(G4int j=0; j<zVoxels; j++)
 		{
 			zPos = -zVCBoxSize/2+j*(zVoxelSize+zVoxelSpace)+zVoxelSpace+zVoxelSize/2;
-			physPMT = new G4PVPlacement(yRot, G4ThreeVector(xPos, yPos, zPos), logicPMT, "physPMT", logicWorld, false, i*zVoxels+j+xVoxels*yVoxels+yVoxels*zVoxels, true);
+			physPMTLens = new G4PVPlacement(yRot, G4ThreeVector(xPos, yPos, zPos), logicPMTLens, "physPMTLens", logicWorld, false, i*zVoxels+j+xVoxels*yVoxels+yVoxels*zVoxels, true);
+			physPMT = new G4PVPlacement(yRot, G4ThreeVector(xPos, yPos-lenPMT/2, zPos), logicPMT, "physPMT", logicWorld, false, i*zVoxels+j+xVoxels*yVoxels+yVoxels*zVoxels, true);
 		}
 	}
 }
@@ -377,7 +403,7 @@ void NuLatDetectorConstruction::ConstructSDandField()
 	SDman->AddNewDetector(detPMT);
 	logicPMT->SetSensitiveDetector(detPMT);
 	// Define Voxels as sensitive volumes
-	/*detVoxel = new NuLatVoxelSensitiveDetector("/NuLatVoxel", xVoxels, yVoxels, zVoxels);
+	detVoxel = new NuLatVoxelSensitiveDetector("/NuLatVoxel", xVoxels, yVoxels, zVoxels);
 	SDman->AddNewDetector(detVoxel);
 	logicVoxel->SetSensitiveDetector(detVoxel);/**/
 }

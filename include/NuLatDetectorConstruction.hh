@@ -33,7 +33,7 @@
 #include "G4Colour.hh"
 // Header file for user defined libraries
 #include "NuLatPMTsensitiveDetector.hh"
-//#include "NuLatVoxelSensDet.hh"
+#include "NuLatVoxelSensitiveDetector.hh"
 // Write the class
 class NuLatDetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -49,18 +49,19 @@ private:
 	// Volume declarations - naming convention: solidName for geometry volume definitions, logicName for logical volume definitions and physName for physical volume definitions
 	G4Box *solidWorld, *solidVCBox, *solidVoxel, *solidAcrylicBoxOuter, *solidAcrylicBoxInner, *solidLGBox/*, *solidSSPlate/**/;
 	G4Trd *solidLGTrd;
-	G4Tubs *solidPMT;
+	G4Tubs *solidPMT, *solidPMTGlass;
 	G4Cons *solidLGCone;
-	G4SubtractionSolid *solidAcrylicBox;
+	G4Sphere *solidPMTconvex;
+	G4SubtractionSolid *solidAcrylicBox, *solidPMTLens;
 	G4IntersectionSolid *solidLG;
-	G4LogicalVolume *logicWorld, *logicVCBox, *logicVoxel, *fNuLatScoringVolume, *logicAcrylicBox, *logicLGBox, *logicLG, *logicPMT/*, *logicSSPanel/**/;
-	G4VPhysicalVolume *physWorld, *physVCBox, *physVoxel, *physAcrylicBox, *physLGBox, *physLG, *physPMT/*, *physSSPanel/**/;
+	G4LogicalVolume *logicWorld, *logicVCBox, *logicVoxel, *fNuLatScoringVolume, *logicAcrylicBox, *logicLGBox, *logicLG, *logicPMT, *logicPMTLens/*, *logicSSPanel/**/;
+	G4VPhysicalVolume *physWorld, *physVCBox, *physVoxel, *physAcrylicBox, *physLGBox, *physLG, *physPMT, *physPMTLens/*, *physSSPanel/**/;
 	// Declare optical surfaces
 	G4OpticalSurface *surface_Al, *surface_SS;
 	// Material declarations
 	G4Element *H, *Be, *C, *O, *Si, *Cr, *Fe, *Ni, *Cu, *Mo, *Pb;
-	G4Material *air, *acrylic, *EJ200, *aluminum, *stainless, *lead;
-	G4MaterialPropertiesTable *mpt_air, *mpt_EJ200, *mpt_acrylic, *mpt_Al, *mpt_SS;
+	G4Material *air, *acrylic, *EJ200, *aluminum, *stainless, *lead, *borosilicateGlass;
+	G4MaterialPropertiesTable *mpt_air, *mpt_EJ200, *mpt_acrylic, *mpt_Al, *mpt_SS, *mpt_BorosilicateGlass;
 	// useful constants:
 	// physical constant for computing photon energies or wavelengths: (note - divide by wavelength in nm to get energy in eV, or divide by energy in eV to get wavelength in nm)
 	const G4double HCNM = 1239.841939*eV*nm;
@@ -81,7 +82,7 @@ private:
 	const G4double wlmax_EJ200 = 425*nm;
 	const G4double fwhm_EJ200 = 2.5*ns;
 	// EJ200 light attenuation length, refractive index, C atom number density, H atom number density and electon number density:
-	const G4double aLenConst_EJ200 = 380.*cm;// note in Yokley (2106) -- best fit attenuation length is 93 cm (p. 131) or 113 cm (p. 134)
+	const G4double aLenConst_EJ200 = 100.*cm;// note in Yokley (2106) -- best fit attenuation length is 93 cm (p. 131) or 113 cm (p. 134); EJ-200 spec sheet lists 380 cm
 	const G4double rindexConst_EJ200 = 1.58;
 	const G4double nH_EJ200 = 5.17E22/cm3;
 	const G4double nC_EJ200 = 4.69E22/cm3;
@@ -94,6 +95,10 @@ private:
 	// Reflective surface properties
 	const G4double refConst_Al = 0.95;
 	const G4double refConst_SS = 1.0;
+	// Borosilicate Glass properties
+	const G4double rho_BorosilicateGlass = 2.65*g/cm3;
+	const G4double rindexConst_BorosilicateGlass = 1.55;
+	const G4double aLenConst_BorosilicateGlass = 100.0*cm;
 	// variable declarations
 	// World volume size in x, y and z dimensions
 	G4double xWorld, yWorld, zWorld;
@@ -103,6 +108,7 @@ private:
 	G4double xVoxelSpace, yVoxelSpace, zVoxelSpace;
 	G4double xVCBoxSize, yVCBoxSize, zVCBoxSize;
 	G4double tAcrylicPanel, lenPMT, lenLGTaper, lenLGSqu, lenLGwPMT;
+	G4double rPMT, tGlass, rSpherePMTsurf, tGlass_min;
 	// Mass fraction of C and H in EJ200
 	G4double totalMass_EJ200 = Cmass*nC_EJ200 + Hmass*nH_EJ200;// mass per cc
 	G4double Cfrac_EJ200 = nC_EJ200*Cmass/totalMass_EJ200;
@@ -115,7 +121,7 @@ private:
 	virtual void ConstructSDandField();
 	// Pointers for SD's: (uncomment when supporting classes are written)
 	NuLatPMTSensitiveDetector *detPMT;
-	//NuLatVoxelSensitiveDetector *detVoxel;
+	NuLatVoxelSensitiveDetector *detVoxel;
 	// Pointer to Generic Messenger Object
 	G4GenericMessenger *fMessenger;
 	// Pointer to Visual Attribute manager object
