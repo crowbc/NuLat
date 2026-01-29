@@ -1,0 +1,22 @@
+{
+type: "GEO",
+version: 1,
+index: "SEGMENTEDDETECTOR", // This is the "index" name your factory looks for
+
+// This is the most important line:
+// It tells RATPAC to use your factory class, matching the
+// name you gave it in the DetectorFactory("SegmentedDetector") constructor.
+geo_factory: "SegmentedDetector",
+
+// --- Parameters for your factory ---
+
+// Grid size
+n_cubes_x: 5,
+n_cubes_y: 5,
+n_cubes_z: 5,
+
+// Dimensions (in inches, the factory converts them)
+cube_size: 2.5,   // PVT cube side length
+air_gap: 0.01,  // Air gap between cubes
+acrylic_thickness: 0.125 // 1/8 inch
+}

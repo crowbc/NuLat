@@ -1,0 +1,19 @@
+# RATPAC already loaded our DB files at startup.
+# We just tell it which geometry to use.
+
+/rat/db/set DETECTOR experiment "Nulat"
+# --- THIS IS THE FIX ---
+# The field is "detector_factory", not "geo_factory"
+#/rat/db/set DETECTOR detector_factory "SegmentedDetector"
+# --- END FIX ---
+
+/rat/db/set DETECTOR geo_file "SEGMENTEDDETECTOR"
+
+# Initialize
+/run/initialize
+
+# Set up Visualization
+/vis/open OGL 600x600-0+0
+/vis/drawVolume
+/vis/viewer/set/viewpointThetaPhi 45 45 deg
+/vis/viewer/zoom 1.2

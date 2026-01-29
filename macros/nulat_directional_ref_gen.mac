@@ -1,0 +1,3 @@
+# create a reference set of data for the 5X5X5 NuLat geometry for each angle starting from 0 and iterating in steps of 1 degree
+/control/execute fiducial_set_init.mac
+/control/loop ibd_gen.mac angle 0 359 1 

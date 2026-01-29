@@ -1,0 +1,35 @@
+{
+name: "PMT",
+index: "r6095_h10534",
+valid_begin : [0, 0],
+valid_end : [0, 0],
+
+// --- Construction Parameters ---
+// Standard 2-inch PMT dimensions (approximate for R6095)
+// The "glass" shell is defined here if using the macro factory,
+// but for your custom factory, we just need the optical properties.
+construction: "toroidal", // Standard shape keyword (not strictly used if we define geometry manually)
+
+// --- Optical Efficiency (Quantum Efficiency) ---
+// Approximate Bialkali Curve: Peak ~25% at 420nm
+efficiency_option: "wavelength",
+efficiency_value1: [300.0, 350.0, 400.0, 420.0, 450.0, 500.0, 550.0, 600.0, 650.0],
+efficiency_value2: [0.020, 0.150, 0.230, 0.250, 0.220, 0.120, 0.050, 0.010, 0.001],
+
+// --- Noise Rate (Dark Counts) ---
+// Datasheet doesn't explicitly state dark rate, but R6095 is typ. 500-1000 Hz.
+noise_rate: 1000.0, // Hz
+
+// --- Timing ---
+// H10534 is "Fast Time Response"
+// Rise time: 2.7ns, Transit Time: 40ns, TTS (FWHM): ~1.5ns (estimate for this class)
+tts: 1.5, // ns (FWHM)
+
+// --- Collection Efficiency ---
+// Probability that a photoelectron reaches the first dynode
+collection_efficiency: 0.70, // Standard assumption for 2-inch tubes
+
+// --- Gain / Charge (Optional/Advanced) ---
+// Only needed if simulating full waveform/digitizer
+// For now, we just count PEs.
+}

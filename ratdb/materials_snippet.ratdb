@@ -1,0 +1,15 @@
+{
+name: "pvt",
+index: "MATERIALS",
+components: [
+{ name: "C", num: 9 },
+{ name: "H", num: 10 }
+],
+density: 1.032 // g/cm^3//,
+// When you are ready, you will add optical properties here and uncomment the comma on the line above
+// properties: {
+//   "SCINTILLATION": ...
+//   "RINDEX": ...
+// }
+}
+

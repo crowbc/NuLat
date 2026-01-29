@@ -1,0 +1,35 @@
+/glg4debug/glg4param omit_muon_processes  1.0
+/glg4debug/glg4param omit_hadronic_processes  1.0
+
+#set the d parameters
+/rat/db/set DETECTOR experiment "NuLat"
+/rat/db/set DETECTOR geo_file "NuLat/NULAT5x5x5_instrumented_reflector.geo"
+
+/tracking/storeTrajectory 1
+/rat/proc prune
+/rat/procset prune "mc.track:opticalphoton"
+
+/run/initialize
+
+/rat/proc count
+/rat/procset update 100
+
+# Use IO.default_output_filename
+/rat/proc outroot
+/rat/procset file "nulat_validation.root"
+## OUTPUT PYTHON-LIKE FORMAT
+/rat/proc outntuple
+/rat/procset include_tracking 1
+/rat/procset include_mcparticles 1
+/rat/procset include_pmthits 1
+/rat/procset include_untriggered_events 1
+
+##### GENERATORS #################
+/generator/add combo ibd:regexfill:poisson
+/generator/ibd/spectrum default
+/generator/vtx/set 1 0 0
+/generator/pos/set cube*
+/generator/rate/set 0.0001476
+
+##### RUN ###########
+/run/beamOn 10000

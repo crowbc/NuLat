@@ -1,0 +1,17 @@
+bin/*
+*.root
+*.ntuple.root
+*.log
+*.o
+nulat.sh
+install/*
+build/*
+Config.hh
+*.txt !CMakeLists.txt !validation_statistics.txt
+validation_plots/
+validation_data*.txt
+*.swp
+*~.DS_Store
+pycache/
+archive/
+*.jpg

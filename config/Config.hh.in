@@ -1,0 +1,11 @@
+#pragma once
+#define CRY_Enabled @CRY_Enabled@
+#define TENSORFLOW_Enabled @TENSORFLOW_Enabled@
+
+#include <string>
+
+namespace RAT {
+
+static const std::string NULATVERSION = "@PROJECT_VERSION@";
+
+}  // namespace RAT
