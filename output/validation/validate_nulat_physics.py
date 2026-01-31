@@ -7,37 +7,69 @@ import subprocess
 class NuLatPhysicsValidator:
     def __init__(self):
         # Configuration
-        self.data_dir = "/home/jack/RATPAC2/ratpac-setup/ratpac/RatpacExperiment/output/validation"
+        self.data_dir = os.getcwd()#"/home/jack/RATPAC2/ratpac-setup/ratpac/NuLat/output/validation"
         self.test_num = 1
-        self.root_file = os.path.join(self.data_dir, f"nulat_validation_test_{self.test_num}.ntuple.root")
+        self.root_filename = f"nulat_validation_test_{self.test_num}.ntuple.root"
+        self.root_file = os.path.join(self.data_dir, self.root_filename)
         self.macro_path = os.path.join(self.data_dir, "readValidation.C")
         self.txt_file = os.path.join(self.data_dir, f"validation_data_test_{self.test_num}.txt")
         self.plot_dir = os.path.join(self.data_dir, "validation_plots")
         self.stats_file = os.path.join(self.plot_dir, "validation_statistics.txt")
         
-        # Detector Bounds (approx +/- 160mm)
-        # 5 * 2.5 inch = 12.5 inch = 317.5 mm total width
-        # Half-width ~ 159 mm. Using 160.0 to be slightly tighter/more precise.
-        self.det_half_width = 160.0 
+        # Detector Geometry
+        self.det_half_width = 160.0 # 5*2.5 inch = 317.5mm, half-width ~ 159mm
+        self.has_shielding = True # Set to True to analyze shielding backgrounds
+        self.Li6_doped = False # Set to False for undoped runs
         
         if not os.path.exists(self.plot_dir):
             os.makedirs(self.plot_dir)
 
     def extract_data(self):
         """Run the ROOT macro to dump text data."""
+        
+        # Check for existing file and prompt user
         if os.path.exists(self.txt_file) and os.path.getsize(self.txt_file) > 0:
-            print(f"Validation data found at {self.txt_file}. Skipping extraction.")
-            return True
+            print(f"Validation data found at {self.txt_file}.")
+            user_input = input("Do you want to overwrite this file? (y/n): ").strip().lower()
+            if user_input != 'y':
+                print("Skipping extraction. Using existing data.")
+                return True
+            else:
+                print("Overwriting existing data file...")
 
         if not os.path.exists(self.root_file):
             print(f"Error: ROOT file not found at {self.root_file}")
             return False
 
-        print(f"Extracting validation data (incl. Gammas) from {self.root_file}...")
+        # Define cuts based on doping
+        if self.Li6_doped:
+            cuts = "trackPDG == 2112 || trackPDG == -11 || trackPDG == 22 || trackPDG == 1000020040 || trackPDG == 1000010030"
+        else:
+            cuts = "trackPDG == 2112 || trackPDG == -11 || trackPDG == 22"
+
+        # Define the C++ macro content dynamically
+        macro_content = f"""
+void readValidation(const char* filename) {{
+  TFile *_file0 = TFile::Open(filename);
+  if (!_file0 || _file0->IsZombie()) {{
+    printf("Error: Cannot open file %s\\n", filename);
+    return;
+  }}
+  auto T = (TTree*)_file0->Get("output");
+  T->SetScanField(-1);
+  const char* columns = "trackPDG : trackProcess : mcx : mcy : mcz : trackPosX : trackPosY : trackPosZ : trackTime : trackKE";
+  const char* cuts = "{cuts}";
+  T->Scan(columns, cuts, "colsize=25 precision=9 col=::20.10");
+}}
+"""
+        with open(self.macro_path, "w") as f:
+            f.write(macro_content)
+
+        print(f"Extracting data from {self.root_file}...")
         cmd = f'root -l -q -b "{self.macro_path}(\\"{self.root_file}\\")" > "{self.txt_file}"'
         subprocess.run(cmd, shell=True, check=True)
         
-        print("Cleaning output file...")
+        # Cleanup
         subprocess.run(f"sed -i '1,3d' {self.txt_file}", shell=True)
         subprocess.run(f"sed -i '$d' {self.txt_file}", shell=True)
         subprocess.run(f"sed -i 's/*//g' {self.txt_file}", shell=True)
@@ -45,7 +77,7 @@ class NuLatPhysicsValidator:
         return True
 
     def process_and_plot(self):
-        print("Streaming data and analyzing...")
+        print(f"Streaming data from {self.txt_file}...")
         
         # --- Metrics ---
         initial_kes = []
@@ -58,19 +90,23 @@ class NuLatPhysicsValidator:
         scatter_dists = [] 
         scatter_energies = [] 
         pos_dists = []
+        
         prompt_gamma_deposits = [] 
-        delayed_gamma_deposits = [] 
-        sample_traces = [] 
+        delayed_gamma_deposits = [] # Gammas from INTERNAL captures
+        delayed_gamma_all = []      # Gammas from ANY capture (Internal + External)
+        shielding_backgrounds = []  # Specific subset: External origin -> Internal hit
+        
+        alpha_energies = []
+        triton_energies = []
 
-        # --- Diagnostic Counters ---
-        diag_thermal_no_capture = 0
-        diag_printed = 0
+        sample_traces = [] 
 
         # --- Stream Variables ---
         current_row = None
         evt_neutrons = [] 
         evt_positrons = [] 
         evt_gammas = [] 
+        evt_ions = [] 
 
         try:
             with open(self.txt_file, 'r') as f:
@@ -92,31 +128,30 @@ class NuLatPhysicsValidator:
 
                     if row != current_row:
                         if current_row is not None:
-                            # Pass diag counter by reference-ish (list)
-                            self._analyze_event(evt_neutrons, evt_positrons, evt_gammas, current_row, 
+                            self._analyze_event(evt_neutrons, evt_positrons, evt_gammas, evt_ions, current_row, 
                                               initial_kes, true_capture_dists, true_capture_times, 
                                               thermal_times, true_capture_scatters, all_track_scatters, escape_dists,
                                               scatter_dists, scatter_energies, pos_dists, sample_traces,
-                                              prompt_gamma_deposits, delayed_gamma_deposits, diag_counter=[diag_thermal_no_capture, diag_printed])
-                            # Update counters from list hack
-                            diag_thermal_no_capture = self.last_diag[0]
-                            diag_printed = self.last_diag[1]
-
+                                              prompt_gamma_deposits, delayed_gamma_deposits, delayed_gamma_all, shielding_backgrounds,
+                                              alpha_energies, triton_energies)
                         current_row = row
                         evt_neutrons = []
                         evt_positrons = []
                         evt_gammas = []
+                        evt_ions = []
 
                     if pdg == 2112: evt_neutrons.append(vals)
                     elif pdg == -11: evt_positrons.append(vals)
                     elif pdg == 22: evt_gammas.append(vals)
+                    elif pdg in [1000020040, 1000010030]: evt_ions.append(vals)
 
                 if current_row is not None:
-                    self._analyze_event(evt_neutrons, evt_positrons, evt_gammas, current_row,
+                    self._analyze_event(evt_neutrons, evt_positrons, evt_gammas, evt_ions, current_row,
                                       initial_kes, true_capture_dists, true_capture_times, 
                                       thermal_times, true_capture_scatters, all_track_scatters, escape_dists,
                                       scatter_dists, scatter_energies, pos_dists, sample_traces,
-                                      prompt_gamma_deposits, delayed_gamma_deposits, diag_counter=[diag_thermal_no_capture, diag_printed])
+                                      prompt_gamma_deposits, delayed_gamma_deposits, delayed_gamma_all, shielding_backgrounds,
+                                      alpha_energies, triton_energies)
         except FileNotFoundError:
             print(f"Error: {self.txt_file} not found.")
             return
@@ -124,64 +159,52 @@ class NuLatPhysicsValidator:
         self._generate_plots_and_stats(initial_kes, true_capture_dists, true_capture_times, thermal_times,
                            true_capture_scatters, all_track_scatters, escape_dists, 
                            scatter_dists, scatter_energies, pos_dists, sample_traces,
-                           prompt_gamma_deposits, delayed_gamma_deposits, diag_thermal_no_capture)
+                           prompt_gamma_deposits, delayed_gamma_deposits, delayed_gamma_all, shielding_backgrounds,
+                           alpha_energies, triton_energies)
 
-    def _analyze_event(self, neutrons, positrons, gammas, row_num,
+    def _analyze_event(self, neutrons, positrons, gammas, ions, row_num,
                       initial_kes, true_capture_dists, true_capture_times, 
                       thermal_times, true_capture_scatters, all_track_scatters, escape_dists,
                       scatter_dists, scatter_energies, pos_dists, sample_traces,
-                      prompt_gamma_deposits, delayed_gamma_deposits, diag_counter):
+                      prompt_gamma_deposits, delayed_gamma_deposits, delayed_gamma_all, shielding_backgrounds,
+                      alpha_energies, triton_energies):
         
         # --- Neutron Analysis ---
         cap_pos = None
         cap_time = None
         is_captured_in_det = False
-        is_thermalized = False
         
         if neutrons:
             neutrons.sort(key=lambda x: x['time'])
             initial_kes.append(neutrons[0]['ke'])
             
-            # Count Physical Scatters & Scatters to Thermalization
-            # Threshold lowered to 0.01 eV (1e-8 MeV) to capture thermalization steps
+            # Scatters
             n_physical_scatters = 0
             n_scatters_to_thermal = 0
             reached_thermal = False
-
             if len(neutrons) > 1:
                 for i in range(len(neutrons) - 1):
-                    # Check scatter
                     if abs(neutrons[i]['ke'] - neutrons[i+1]['ke']) > 1.0e-8: 
                         n_physical_scatters += 1
-                        if not reached_thermal:
-                            n_scatters_to_thermal += 1
-                    
-                    # Update thermal status based on destination energy
-                    if neutrons[i+1]['ke'] < 2.5e-8:
-                        reached_thermal = True
-
+                        if not reached_thermal: n_scatters_to_thermal += 1
+                    if neutrons[i+1]['ke'] < 2.5e-8: reached_thermal = True
             all_track_scatters.append(n_physical_scatters)
             
-            # Check Thermalization (for thermal_times stats)
-            for step in neutrons:
-                if step['ke'] < 2.5e-8:
-                    thermal_times.append(step['time'])
-                    is_thermalized = True
-                    break
-
-            # --- Robust Capture Identification ---
+            # Capture
             end_step = neutrons[-1]
             pos = end_step['pos']
             in_detector = (abs(pos[0]) < self.det_half_width) and \
                           (abs(pos[1]) < self.det_half_width) and \
                           (abs(pos[2]) < self.det_half_width)
             
-            # Valid End Criteria:
             is_valid_end = (end_step['proc'] == 1) or (end_step['ke'] == 0.0 and in_detector)
-            
             mc_vtx = np.array(end_step['mc'])
             end_pos_arr = np.array(end_step['pos'])
             dist = np.linalg.norm(end_pos_arr - mc_vtx)
+
+            # Define Capture Time/Pos regardless of location for general gamma matching
+            general_cap_time = end_step['time']
+            general_cap_pos = end_step['pos']
 
             if in_detector and is_valid_end:
                 is_captured_in_det = True
@@ -189,23 +212,17 @@ class NuLatPhysicsValidator:
                 cap_time = end_step['time'] 
                 true_capture_dists.append(dist)
                 true_capture_times.append(end_step['time'])
-                # Store scatters ONLY until thermalization for captured events
                 true_capture_scatters.append(n_scatters_to_thermal)
             else:
                 escape_dists.append(dist)
-                
-                # --- Diagnostic: Thermalized but not captured? ---
-                if is_thermalized and in_detector:
-                    diag_counter[0] += 1
-                    if diag_counter[1] < 10: 
-                        print(f"DIAGNOSTIC: Row {row_num} thermalized but NOT captured.")
-                        print(f"  Final Pos: {pos}")
-                        print(f"  Final KE: {end_step['ke']}")
-                        print(f"  Final Proc: {end_step['proc']}")
-                        diag_counter[1] += 1
-
             
-            # Step Distances/Energies (Using same threshold as scatter count)
+            # Thermalization
+            for step in neutrons:
+                if step['ke'] < 2.5e-8:
+                    thermal_times.append(step['time'])
+                    break
+            
+            # Scatter Plot Data
             if len(neutrons) > 1:
                 for i in range(len(neutrons) - 1):
                     if abs(neutrons[i]['ke'] - neutrons[i+1]['ke']) > 1.0e-8:
@@ -215,6 +232,7 @@ class NuLatPhysicsValidator:
                         scatter_dists.append(d)
                         scatter_energies.append(neutrons[i]['ke'])
             
+            # Traces
             if len(sample_traces) < 5 and len(neutrons) > 10:
                 times = [x['time'] for x in neutrons]
                 kes = [x['ke'] for x in neutrons]
@@ -228,7 +246,6 @@ class NuLatPhysicsValidator:
             ann_step = positrons[-1]
             for step in positrons:
                 if step['proc'] == 4: ann_step = step
-            
             mc_vtx = np.array(ann_step['mc'])
             ann_pos_arr = np.array(ann_step['pos'])
             ann_pos = ann_step['pos'] 
@@ -236,75 +253,116 @@ class NuLatPhysicsValidator:
             dist = np.linalg.norm(ann_pos_arr - mc_vtx)
             pos_dists.append(dist)
 
-        # --- Gamma Matching ---
+        # --- Ion Analysis (Li-6) ---
+        if ions:
+            for ion in ions:
+                if ion['pdg'] == 1000020040: # Alpha
+                    alpha_energies.append(ion['ke'])
+                elif ion['pdg'] == 1000010030: # Triton
+                    triton_energies.append(ion['ke'])
+
+        # --- Gamma Analysis ---
+        # 1. Prompt Gammas
         if ann_pos and ann_time:
             for g in gammas:
                 if g['time'] >= ann_time:
                     g_pos = np.array(g['pos'])
                     d = np.linalg.norm(g_pos - np.array(ann_pos))
-                    if d > 10.0: 
-                        if (g['time'] - ann_time) < 2.0:
-                            prompt_gamma_deposits.append(d)
-                            break 
+                    if d > 10.0 and (g['time'] - ann_time) < 2.0:
+                        prompt_gamma_deposits.append(d)
+                        break
 
-        if is_captured_in_det:
+        # 2. Delayed Gammas (All Sources)
+        if neutrons: # If we had a neutron, we have a capture/stop time
             for g in gammas:
-                if g['time'] >= cap_time:
+                if g['time'] >= general_cap_time:
                     g_pos = np.array(g['pos'])
-                    d = np.linalg.norm(g_pos - np.array(cap_pos))
-                    if d > 10.0:
-                        if (g['time'] - cap_time) < 5.0: 
+                    d = np.linalg.norm(g_pos - np.array(general_cap_pos))
+                    if d > 10.0 and (g['time'] - general_cap_time) < 5.0:
+                        delayed_gamma_all.append(d)
+                        
+                        # Subset: Internal Capture Only
+                        if is_captured_in_det:
                             delayed_gamma_deposits.append(d)
+                        break
+
+        # 3. Shielding Background Analysis
+        if self.has_shielding:
+            for g in gammas:
+                if neutrons:
+                    n_end = neutrons[-1]
+                    end_pos = n_end['pos']
+                    is_outside = not ((abs(end_pos[0]) < self.det_half_width) and 
+                                      (abs(end_pos[1]) < self.det_half_width) and 
+                                      (abs(end_pos[2]) < self.det_half_width))
+                    
+                    if is_outside and g['time'] >= n_end['time']:
+                        g_pos = g['pos']
+                        g_in_det = (abs(g_pos[0]) < self.det_half_width) and \
+                                   (abs(g_pos[1]) < self.det_half_width) and \
+                                   (abs(g_pos[2]) < self.det_half_width)
+                        
+                        if g_in_det:
+                            src_pos = np.array(n_end['pos'])
+                            hit_pos = np.array(g['pos'])
+                            travel_dist = np.linalg.norm(hit_pos - src_pos)
+                            shielding_backgrounds.append(travel_dist)
                             break
-        
-        self.last_diag = diag_counter
 
     def _generate_plots_and_stats(self, initial_kes, capture_dists, capture_times, thermal_times,
                        true_capture_scatters, all_track_scatters, escape_dists, 
                        scatter_dists, scatter_energies, pos_dists, sample_traces,
-                       prompt_gamma_deposits, delayed_gamma_deposits, diag_thermal_no_capture):
+                       prompt_gamma_deposits, delayed_gamma_deposits, delayed_gamma_all, shielding_backgrounds,
+                       alpha_energies, triton_energies):
         
         print(f"Generating plots and statistics in {self.plot_dir}...")
         
         with open(self.stats_file, 'w') as stats:
-            stats.write("NuLat Physics Validation Statistics (Diagnostic)\n")
-            stats.write("================================================\n\n")
+            stats.write("NuLat Physics Validation Statistics (Detailed Gamma Analysis)\n")
+            stats.write("===========================================================\n\n")
             
             n_captures = len(capture_dists)
             n_escapes = len(escape_dists)
-            total_simulated = 10000 
             
             stats.write(f"Total Neutron Captures (Inside Detector): {n_captures}\n")
             stats.write(f"Total Neutron Escapes (Outside Detector): {n_escapes}\n")
-            stats.write(f"Capture Efficiency: {n_captures/total_simulated*100:.2f}%\n")
-            stats.write(f"Thermalized but NOT Captured: {diag_thermal_no_capture}\n")
+            if (n_captures + n_escapes) > 0:
+                stats.write(f"Capture Efficiency: {n_captures/(n_captures+n_escapes)*100:.2f}%\n")
             stats.write(f"Total Positron Annihilations: {len(pos_dists)}\n")
             stats.write(f"Prompt Gammas Detected: {len(prompt_gamma_deposits)}\n")
-            stats.write(f"Delayed Gammas Detected: {len(delayed_gamma_deposits)}\n\n")
-            stats.write("-" * 40 + "\n")
+            stats.write(f"Delayed Gammas (Internal Capture): {len(delayed_gamma_deposits)}\n")
+            stats.write(f"Delayed Gammas (All Sources): {len(delayed_gamma_all)}\n")
+            stats.write(f"Li-6 Alphas Detected: {len(alpha_energies)}\n")
+            stats.write(f"Li-6 Tritons Detected: {len(triton_energies)}\n")
+            if self.has_shielding:
+                stats.write(f"Shielding Background Gammas (Entering Detector): {len(shielding_backgrounds)}\n")
+            
+            stats.write("\n" + "-" * 40 + "\n")
 
             def plot_hist_stairs(data, bins, xlabel, fname, color='skyblue', logx=False, stat_label="", x_range=None):
                 if not data: 
+                    if stat_label:
+                        stats.write(f"{stat_label}:\n")
+                        stats.write(f"  Count: 0\n\n")
                     print(f"Warning: No data for {fname}")
                     return
                 
-                data_np = np.array(data)
-                mean_val = np.mean(data_np)
-                std_val = np.std(data_np)
-                
+                # --- STATISTICS BLOCK ---
                 if stat_label:
+                    data_np = np.array(data)
+                    mean_val = np.mean(data_np)
+                    std_val = np.std(data_np)
                     stats.write(f"{stat_label}:\n")
                     stats.write(f"  Mean: {mean_val:.4g}\n")
                     stats.write(f"  Std Dev: {std_val:.4g}\n")
                     stats.write(f"  Count: {len(data)}\n\n")
+                # ------------------------
 
                 plt.figure(figsize=(8,6))
                 try:
-                    # Apply explicit range if provided
                     if x_range:
-                        # Filter data for better histogram display
                         data_filtered = [d for d in data if x_range[0] <= d <= x_range[1]]
-                        if not data_filtered: data_filtered = data # Fallback
+                        if not data_filtered: data_filtered = data 
                         counts, edges = np.histogram(data_filtered, bins=bins, range=x_range)
                     else:
                         counts, edges = np.histogram(data, bins=bins)
@@ -320,44 +378,52 @@ class NuLatPhysicsValidator:
                     print(f"Plot error {fname}: {e}")
                 plt.close()
 
-            # Plots
-            
-            # Neutron Initial KE: Convert MeV to keV for plotting
+            # --- Plots ---
             initial_kes_kev = [e * 1000.0 for e in initial_kes]
             plot_hist_stairs(initial_kes_kev, 50, 'Neutron Initial Energy (keV)', 'neutron_initial_ke.png', 
-                             stat_label="Neutron Initial Kinetic Energy (keV)")
+                             stat_label="Neutron Initial Kinetic Energy")
             
             plot_hist_stairs(capture_dists, 50, 'Capture Distance (mm)', 'neutron_capture_dist.png', 'orange', 
                              stat_label="Neutron Capture Distance (Inside Detector)")
+            
             plot_hist_stairs(escape_dists, 50, 'Escape Distance (mm)', 'neutron_escape_dist.png', 'gray', 
                              stat_label="Neutron Escape Distance")
             
-            # Positron Annihilation Distance: Limit range to see main population (e.g. 0-200mm)
-            plot_hist_stairs(pos_dists, 50, 'Annihilation Distance (mm)', 'pos_annihilation_dist.png', 'green', 
-                             stat_label="Positron Annihilation Distance", x_range=(0, 200))
+            plot_hist_stairs(pos_dists, 50, 'Annihilation Distance (mm)', 'pos_annihilation_dist.png', 'green', x_range=(0, 200),
+                             stat_label="Positron Annihilation Distance")
             
-            # Prompt Gamma Scatter Distance: Limit range (e.g. 0-200mm)
-            plot_hist_stairs(prompt_gamma_deposits, 50, 'Prompt Gamma Scatter Distance (mm)', 
-                             'prompt_gamma_scatter.png', 'red', 
-                             stat_label="Prompt Gamma Scatter Distance", x_range=(0, 200))
+            # Gammas
+            plot_hist_stairs(prompt_gamma_deposits, 50, 'Prompt Gamma Scatter Distance (mm)', 'prompt_gamma_scatter.png', 'red', x_range=(0, 200),
+                             stat_label="Prompt Gamma Scatter Distance")
             
-            # Delayed Gamma Scatter Distance: Limit range (e.g. 0-200mm)
-            plot_hist_stairs(delayed_gamma_deposits, 50, 'Delayed Gamma Scatter Distance (mm)', 
-                             'delayed_gamma_scatter.png', 'darkblue', 
-                             stat_label="Delayed Gamma Scatter Distance", x_range=(0, 200))
+            plot_hist_stairs(delayed_gamma_deposits, 50, 'Delayed Gamma Scatter Distance (Internal Only)', 'delayed_gamma_scatter.png', 'darkblue', x_range=(0, 200),
+                             stat_label="Delayed Gamma Scatter Distance (Internal)")
+            
+            plot_hist_stairs(delayed_gamma_all, 50, 'Delayed Gamma Scatter Distance (All)', 'delayed_gamma_all_scatter.png', 'blue', x_range=(0, 200),
+                             stat_label="Delayed Gamma Scatter Distance (All Sources)")
+            
+            # Li-6 Ions
+            plot_hist_stairs(alpha_energies, 50, 'Alpha Energy (MeV)', 'li6_alpha_energy.png', 'red', 
+                             stat_label="Li-6 Alpha Initial Energy")
+            plot_hist_stairs(triton_energies, 50, 'Triton Energy (MeV)', 'li6_triton_energy.png', 'blue', 
+                             stat_label="Li-6 Triton Initial Energy")
 
+            # Backgrounds
+            if self.has_shielding:
+                plot_hist_stairs(shielding_backgrounds, 50, 'Background Gamma Travel Dist (mm)', 'shielding_backgrounds.png', 'black',
+                                 stat_label="Shielding Background Gamma Travel")
+
+            # Standard Plots
             if true_capture_scatters:
-                # Removed hard x_range limit as requested
-                # Changed label to reflect "Scatters to Thermalization"
-                # Use integer bins to avoid gaps
                 mx = max(true_capture_scatters)
                 bins_scat = np.arange(0, mx + 2) - 0.5
-                plot_hist_stairs(true_capture_scatters, bins_scat, 'Number of Scatters to Thermalization', 'neutron_scatters_captured.png', 'purple', 
+                plot_hist_stairs(true_capture_scatters, bins_scat, 'Number of Scatters to Thermalization', 'neutron_scatters_captured.png', 'purple',
                                  stat_label="Neutron Scatters to Thermalization (Captured Events)")
 
-            plot_hist_stairs(thermal_times, np.logspace(0, 6, 50), 'Thermalization Time (ns)', 'therm_time.png', 'teal', logx=True, 
+            plot_hist_stairs(thermal_times, np.logspace(0, 6, 50), 'Thermalization Time (ns)', 'therm_time.png', 'teal', logx=True,
                              stat_label="Time to Thermalization")
-            plot_hist_stairs(capture_times, np.logspace(2, 6, 50), 'Capture Time (ns)', 'capture_time.png', 'brown', logx=True, 
+            
+            plot_hist_stairs(capture_times, np.logspace(2, 6, 50), 'Capture Time (ns)', 'capture_time.png', 'brown', logx=True,
                              stat_label="Neutron Capture Time (Inside Detector)")
 
             if sample_traces:
@@ -378,7 +444,6 @@ class NuLatPhysicsValidator:
             if scatter_energies and scatter_dists:
                 plt.figure(figsize=(10,8))
                 try:
-                    # Extend energy range down to 1e-9 MeV (1 meV) to see thermal spot
                     plt.hist2d(scatter_dists, scatter_energies, 
                                bins=[np.logspace(-2, 3, 50), np.logspace(-9, 0, 50)], 
                                cmap='plasma', norm='log')
