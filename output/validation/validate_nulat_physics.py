@@ -1,5 +1,6 @@
 import os
 import sys
+import glob
 import numpy as np
 import matplotlib.pyplot as plt
 import subprocess
@@ -8,18 +9,87 @@ class NuLatPhysicsValidator:
     def __init__(self):
         # Configuration
         self.data_dir = os.getcwd()#"/home/jack/RATPAC2/ratpac-setup/ratpac/NuLat/output/validation"
-        self.test_num = 1
-        self.root_filename = f"nulat_validation_test_{self.test_num}.ntuple.root"
-        self.root_file = os.path.join(self.data_dir, self.root_filename)
+        
+        # Initialize placeholders (will be set in configure())
+        self.test_num = None# 2
+        self.root_filename = None#f"nulat_validation_test_{self.test_num}.ntuple.root"
+        self.root_file = None#os.path.join(self.data_dir, self.root_filename)
+        self.txt_file = None#os.path.join(self.data_dir, f"validation_data_test_{self.test_num}.txt")
+        
         self.macro_path = os.path.join(self.data_dir, "readValidation.C")
-        self.txt_file = os.path.join(self.data_dir, f"validation_data_test_{self.test_num}.txt")
         self.plot_dir = os.path.join(self.data_dir, "validation_plots")
         self.stats_file = os.path.join(self.plot_dir, "validation_statistics.txt")
         
         # Detector Geometry
         self.det_half_width = 160.0 # 5*2.5 inch = 317.5mm, half-width ~ 159mm
-        self.has_shielding = True # Set to True to analyze shielding backgrounds
-        self.Li6_doped = False # Set to False for undoped runs
+        
+        # Physics Flags (will be set by user)
+        self.has_shielding = False
+        self.Li6_doped = False
+
+    def configure(self):
+        """Detect files and prompt user for configuration."""
+        
+        # 1. Detect Root Files
+        root_files = glob.glob(os.path.join(self.data_dir, "nulat_validation_test_*.ntuple.root"))
+        root_files.sort()
+        
+        print("\n--- NuLat Physics Validator Configuration ---")
+        
+        if not root_files:
+            print("No 'nulat_validation_test_*.ntuple.root' files found in current directory.")
+            user_val = input("Enter the full filename or test number (e.g., '2'): ").strip()
+            if user_val.isdigit():
+                self.test_num = user_val
+                self.root_filename = f"nulat_validation_test_{self.test_num}.ntuple.root"
+            else:
+                self.root_filename = user_val
+                # Try to extract a number for text file naming, else use 'custom'
+                import re
+                match = re.search(r'test_(\d+)', user_val)
+                self.test_num = match.group(1) if match else "custom"
+        
+        elif len(root_files) == 1:
+            self.root_filename = os.path.basename(root_files[0])
+            # Extract number
+            import re
+            match = re.search(r'test_(\d+)', self.root_filename)
+            self.test_num = match.group(1) if match else "0"
+            print(f"Found one file: {self.root_filename}. Using it.")
+            
+        else:
+            print("Multiple ROOT files found:")
+            for i, f in enumerate(root_files):
+                print(f"  [{i+1}] {os.path.basename(f)}")
+            
+            choice = input(f"Select file (1-{len(root_files)}) or enter test number: ").strip()
+            if choice.isdigit() and 1 <= int(choice) <= len(root_files):
+                self.root_filename = os.path.basename(root_files[int(choice)-1])
+                import re
+                match = re.search(r'test_(\d+)', self.root_filename)
+                self.test_num = match.group(1) if match else "0"
+            elif choice.isdigit():
+                self.test_num = choice
+                self.root_filename = f"nulat_validation_test_{self.test_num}.ntuple.root"
+            else:
+                print("Invalid selection. Exiting.")
+                sys.exit(1)
+
+        # Set derived paths
+        self.root_file = os.path.join(self.data_dir, self.root_filename)
+        self.txt_file = os.path.join(self.data_dir, f"validation_data_test_{self.test_num}.txt")
+        
+        print(f"Target ROOT File: {self.root_filename}")
+        print(f"Target Text File: {os.path.basename(self.txt_file)}")
+
+        # 2. Physics Flags
+        print("\n--- Simulation Parameters ---")
+        self.has_shielding = input("Is this run SHIELDED? (y/n) [n]: ").strip().lower() == 'y'
+        self.Li6_doped = input("Is this run Li-6 DOPED? (y/n) [n]: ").strip().lower() == 'y'
+        
+        print("\nConfiguration Complete.")
+        print(f"Shielding: {self.has_shielding}")
+        print(f"Li-6 Doped: {self.Li6_doped}\n")
         
         if not os.path.exists(self.plot_dir):
             os.makedirs(self.plot_dir)
@@ -92,9 +162,9 @@ void readValidation(const char* filename) {{
         pos_dists = []
         
         prompt_gamma_deposits = [] 
-        delayed_gamma_deposits = [] # Gammas from INTERNAL captures
-        delayed_gamma_all = []      # Gammas from ANY capture (Internal + External)
-        shielding_backgrounds = []  # Specific subset: External origin -> Internal hit
+        delayed_gamma_deposits = [] 
+        delayed_gamma_all = []
+        shielding_backgrounds = [] 
         
         alpha_energies = []
         triton_energies = []
@@ -255,11 +325,14 @@ void readValidation(const char* filename) {{
 
         # --- Ion Analysis (Li-6) ---
         if ions:
-            for ion in ions:
-                if ion['pdg'] == 1000020040: # Alpha
-                    alpha_energies.append(ion['ke'])
-                elif ion['pdg'] == 1000010030: # Triton
-                    triton_energies.append(ion['ke'])
+            # FIX: Find MAX KE for each species to get initial energy
+            alpha_steps = [x['ke'] for x in ions if x['pdg'] == 1000020040]
+            triton_steps = [x['ke'] for x in ions if x['pdg'] == 1000010030]
+            
+            if alpha_steps:
+                alpha_energies.append(max(alpha_steps))
+            if triton_steps:
+                triton_energies.append(max(triton_steps))
 
         # --- Gamma Analysis ---
         # 1. Prompt Gammas
@@ -270,7 +343,7 @@ void readValidation(const char* filename) {{
                     d = np.linalg.norm(g_pos - np.array(ann_pos))
                     if d > 10.0 and (g['time'] - ann_time) < 2.0:
                         prompt_gamma_deposits.append(d)
-                        break
+                        break 
 
         # 2. Delayed Gammas (All Sources)
         if neutrons: # If we had a neutron, we have a capture/stop time
@@ -307,7 +380,7 @@ void readValidation(const char* filename) {{
                             hit_pos = np.array(g['pos'])
                             travel_dist = np.linalg.norm(hit_pos - src_pos)
                             shielding_backgrounds.append(travel_dist)
-                            break
+                            break 
 
     def _generate_plots_and_stats(self, initial_kes, capture_dists, capture_times, thermal_times,
                        true_capture_scatters, all_track_scatters, escape_dists, 
@@ -462,5 +535,6 @@ void readValidation(const char* filename) {{
 
 if __name__ == "__main__":
     validator = NuLatPhysicsValidator()
+    validator.configure()
     if validator.extract_data():
         validator.process_and_plot()

@@ -6,10 +6,16 @@ This repository was cloned from the RatpacExperiment repository found at
 https://github.com/rat-pac/RatpacExperiment and modified to create the NuLat experiment. 
 
 # version history
+03FEB2026 -- v 1.0.2: Hotfix 2.
+                      Added missing logic for alpha and triton tracks analysis to
+                      validation script.
+                      Added a configuration subroutine to scan for ROOT files and set
+                      Boolean flags for shielding and doping to validation script.
+
 30JAN2026 -- v 1.0.1: Hotfix 1.
                       Added Li-6 dopant definition to MATERIALS_NULAT.ratdb.
-                      Added path support to data validation analysis script (output/...
-                      ...validation/validate_nulat_physics.py)
+                      Added path support to data validation analysis script (output/
+                      validation/validate_nulat_physics.py)
                       Added alpha and triton tracks analysis to validation script.
                       Updated gamma tracking to monitor for accidentals from shielding-
                       captured gammas.
