@@ -6,6 +6,12 @@ This repository was cloned from the RatpacExperiment repository found at
 https://github.com/rat-pac/RatpacExperiment and modified to create the NuLat experiment. 
 
 # version history
+09FEB2026 -- v 1.1.0: Energy depositions.
+                      Added logic for analysis of energy depositions in MC tracks to
+                      validation script. Note: this logic needs refinement.
+                      Added shell script for customized RATPAC2 environment for the
+                      NuLat experiment. Note: this requires using absolute paths in macro files.
+
 03FEB2026 -- v 1.0.2: Hotfix 2.
                       Added missing logic for alpha and triton tracks analysis to
                       validation script.

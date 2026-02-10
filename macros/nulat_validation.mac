@@ -3,7 +3,9 @@
 
 #set the d parameters
 /rat/db/set DETECTOR experiment "NuLat"
-/rat/db/set DETECTOR geo_file "NuLat/NULAT5x5x5_instrumented_Li6.geo"
+/rat/db/load /home/jack/RATPAC2/ratpac-setup/ratpac/NuLat/ratdb/MATERIALS_NULAT.ratdb
+/rat/db/load /home/jack/RATPAC2/ratpac-setup/ratpac/NuLat/ratdb/PMT_NULAT.ratdb
+/rat/db/set DETECTOR geo_file "/home/jack/RATPAC2/ratpac-setup/ratpac/NuLat/data/NULAT5x5x5_instrumented_Li6.geo"
 
 /tracking/storeTrajectory 1
 /rat/proc prune

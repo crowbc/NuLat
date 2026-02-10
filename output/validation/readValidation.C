@@ -1,10 +1,7 @@
 
 void readValidation(const char* filename) {
   TFile *_file0 = TFile::Open(filename);
-  if (!_file0 || _file0->IsZombie()) {
-    printf("Error: Cannot open file %s\n", filename);
-    return;
-  }
+  if (!_file0 || _file0->IsZombie()) { return; }
   auto T = (TTree*)_file0->Get("output");
   T->SetScanField(-1);
   const char* columns = "trackPDG : trackProcess : mcx : mcy : mcz : trackPosX : trackPosY : trackPosZ : trackTime : trackKE";

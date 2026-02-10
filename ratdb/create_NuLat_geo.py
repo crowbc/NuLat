@@ -1,7 +1,7 @@
 import math
 
 # --- Configuration ---
-material_choice = "pvt_li6" # Using Doped PVT
+material_choice = "pvt" # Using Undoped PVT
 use_reflector = False       # Reflector Removed
 
 # --- Dimensions (in mm) ---
@@ -49,7 +49,12 @@ wX = box_outer_x + 1000.0
 wY = box_outer_y + 1000.0
 wZ = box_outer_z + 1000.0
 
-geo_fname_str = f"NULAT{imax}x{jmax}x{kmax}_instrumented_Li6.geo"
+if (use_reflector):
+    geo_fname_str = f"NULAT{imax}x{jmax}x{kmax}_instrumented_undoped.geo"
+elif (material_choice == "pvt_li6"):
+    geo_fname_str = f"NULAT{imax}x{jmax}x{kmax}_instrumented_Li6.geo"
+else:
+    geo_fname_str = f"NULAT{imax}x{jmax}x{kmax}_instrumented_undoped.geo"
 
 # --- Geometry String ---
 _str = f"""

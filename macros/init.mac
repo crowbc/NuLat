@@ -4,8 +4,9 @@
 
 #set the d parameters
 /rat/db/set DETECTOR experiment "NuLat"
-/rat/db/set DETECTOR geo_file "NuLat/NULAT5x5x5.geo"
-#/rat/db/set DETECTOR geo_file "NuLat/NULAT5x5x5_half_instrumented.geo"
+/rat/db/load /home/jack/RATPAC2/ratpac-setup/ratpac/NuLat/ratdb/MATERIALS_NULAT.ratdb
+/rat/db/load /home/jack/RATPAC2/ratpac-setup/ratpac/NuLat/ratdb/PMT_NULAT.ratdb
+/rat/db/set DETECTOR geo_file "/home/jack/RATPAC2/ratpac-setup/ratpac/NuLat/data/NULAT5x5x5_instrumented_Li6.geo"
 
 /tracking/storeTrajectory 1
 /rat/proc prune
@@ -29,6 +30,6 @@
 ##### GENERATORS #################
 /generator/add combo ibd:regexfill:poisson
 /generator/ibd/spectrum default
-#/generator/vtx/set 1 0 0 # default to 0 degrees, +x direction
+/generator/vtx/set 1 0 0 # default to 0 degrees, +x direction
 /generator/pos/set cube*
 /generator/rate/set 0.0001476

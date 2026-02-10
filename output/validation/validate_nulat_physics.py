@@ -8,13 +8,13 @@ import subprocess
 class NuLatPhysicsValidator:
     def __init__(self):
         # Configuration
-        self.data_dir = os.getcwd()#"/home/jack/RATPAC2/ratpac-setup/ratpac/NuLat/output/validation"
+        self.data_dir = os.getcwd()
         
         # Initialize placeholders (will be set in configure())
-        self.test_num = None# 2
-        self.root_filename = None#f"nulat_validation_test_{self.test_num}.ntuple.root"
-        self.root_file = None#os.path.join(self.data_dir, self.root_filename)
-        self.txt_file = None#os.path.join(self.data_dir, f"validation_data_test_{self.test_num}.txt")
+        self.test_num = None
+        self.root_filename = None
+        self.root_file = None
+        self.txt_file = None
         
         self.macro_path = os.path.join(self.data_dir, "readValidation.C")
         self.plot_dir = os.path.join(self.data_dir, "validation_plots")
@@ -96,35 +96,25 @@ class NuLatPhysicsValidator:
 
     def extract_data(self):
         """Run the ROOT macro to dump text data."""
-        
-        # Check for existing file and prompt user
         if os.path.exists(self.txt_file) and os.path.getsize(self.txt_file) > 0:
-            print(f"Validation data found at {self.txt_file}.")
-            user_input = input("Do you want to overwrite this file? (y/n): ").strip().lower()
-            if user_input != 'y':
-                print("Skipping extraction. Using existing data.")
-                return True
-            else:
-                print("Overwriting existing data file...")
+            print(f"Found existing data: {self.txt_file}")
+            ans = input("Overwrite? (y/n) [n]: ").strip().lower()
+            if ans != 'y': return True
 
         if not os.path.exists(self.root_file):
-            print(f"Error: ROOT file not found at {self.root_file}")
+            print(f"Error: {self.root_file} not found.")
             return False
 
-        # Define cuts based on doping
         if self.Li6_doped:
             cuts = "trackPDG == 2112 || trackPDG == -11 || trackPDG == 22 || trackPDG == 1000020040 || trackPDG == 1000010030"
         else:
             cuts = "trackPDG == 2112 || trackPDG == -11 || trackPDG == 22"
 
-        # Define the C++ macro content dynamically
+        # REMOVED trackID and parentID from columns to avoid TTreeFormula errors
         macro_content = f"""
 void readValidation(const char* filename) {{
   TFile *_file0 = TFile::Open(filename);
-  if (!_file0 || _file0->IsZombie()) {{
-    printf("Error: Cannot open file %s\\n", filename);
-    return;
-  }}
+  if (!_file0 || _file0->IsZombie()) {{ return; }}
   auto T = (TTree*)_file0->Get("output");
   T->SetScanField(-1);
   const char* columns = "trackPDG : trackProcess : mcx : mcy : mcz : trackPosX : trackPosY : trackPosZ : trackTime : trackKE";
@@ -135,21 +125,19 @@ void readValidation(const char* filename) {{
         with open(self.macro_path, "w") as f:
             f.write(macro_content)
 
-        print(f"Extracting data from {self.root_file}...")
+        print("Running extraction...")
         cmd = f'root -l -q -b "{self.macro_path}(\\"{self.root_file}\\")" > "{self.txt_file}"'
         subprocess.run(cmd, shell=True, check=True)
         
-        # Cleanup
         subprocess.run(f"sed -i '1,3d' {self.txt_file}", shell=True)
         subprocess.run(f"sed -i '$d' {self.txt_file}", shell=True)
         subprocess.run(f"sed -i 's/*//g' {self.txt_file}", shell=True)
-        
         return True
 
     def process_and_plot(self):
         print(f"Streaming data from {self.txt_file}...")
         
-        # --- Metrics ---
+        # Metrics
         initial_kes = []
         true_capture_dists = [] 
         true_capture_times = []
@@ -169,14 +157,16 @@ void readValidation(const char* filename) {{
         alpha_energies = []
         triton_energies = []
 
-        sample_traces = [] 
+        # Energy Depositions (Total per event)
+        edep_positron = []
+        edep_gamma_prompt = []  # NEW
+        edep_gamma_delayed = [] # NEW
+        edep_alpha = []
+        edep_triton = []
 
-        # --- Stream Variables ---
+        sample_traces = [] 
         current_row = None
-        evt_neutrons = [] 
-        evt_positrons = [] 
-        evt_gammas = [] 
-        evt_ions = [] 
+        evt_steps = []
 
         try:
             with open(self.txt_file, 'r') as f:
@@ -187,6 +177,7 @@ void readValidation(const char* filename) {{
                         row = int(parts[0])
                         pdg = int(float(parts[2])) 
                         proc = int(float(parts[3]))
+                        # Parse without ID columns
                         vals = {
                             'pdg': pdg, 'proc': proc,
                             'mc': (float(parts[4]), float(parts[5]), float(parts[6])),
@@ -198,30 +189,26 @@ void readValidation(const char* filename) {{
 
                     if row != current_row:
                         if current_row is not None:
-                            self._analyze_event(evt_neutrons, evt_positrons, evt_gammas, evt_ions, current_row, 
+                            self._analyze_event(evt_steps, current_row, 
                                               initial_kes, true_capture_dists, true_capture_times, 
                                               thermal_times, true_capture_scatters, all_track_scatters, escape_dists,
                                               scatter_dists, scatter_energies, pos_dists, sample_traces,
                                               prompt_gamma_deposits, delayed_gamma_deposits, delayed_gamma_all, shielding_backgrounds,
-                                              alpha_energies, triton_energies)
+                                              alpha_energies, triton_energies,
+                                              edep_positron, edep_gamma_prompt, edep_gamma_delayed, edep_alpha, edep_triton)
                         current_row = row
-                        evt_neutrons = []
-                        evt_positrons = []
-                        evt_gammas = []
-                        evt_ions = []
+                        evt_steps = []
 
-                    if pdg == 2112: evt_neutrons.append(vals)
-                    elif pdg == -11: evt_positrons.append(vals)
-                    elif pdg == 22: evt_gammas.append(vals)
-                    elif pdg in [1000020040, 1000010030]: evt_ions.append(vals)
+                    evt_steps.append(vals)
 
                 if current_row is not None:
-                    self._analyze_event(evt_neutrons, evt_positrons, evt_gammas, evt_ions, current_row,
+                    self._analyze_event(evt_steps, current_row,
                                       initial_kes, true_capture_dists, true_capture_times, 
                                       thermal_times, true_capture_scatters, all_track_scatters, escape_dists,
                                       scatter_dists, scatter_energies, pos_dists, sample_traces,
                                       prompt_gamma_deposits, delayed_gamma_deposits, delayed_gamma_all, shielding_backgrounds,
-                                      alpha_energies, triton_energies)
+                                      alpha_energies, triton_energies,
+                                      edep_positron, edep_gamma_prompt, edep_gamma_delayed, edep_alpha, edep_triton)
         except FileNotFoundError:
             print(f"Error: {self.txt_file} not found.")
             return
@@ -230,22 +217,111 @@ void readValidation(const char* filename) {{
                            true_capture_scatters, all_track_scatters, escape_dists, 
                            scatter_dists, scatter_energies, pos_dists, sample_traces,
                            prompt_gamma_deposits, delayed_gamma_deposits, delayed_gamma_all, shielding_backgrounds,
-                           alpha_energies, triton_energies)
+                           alpha_energies, triton_energies,
+                           edep_positron, edep_gamma_prompt, edep_gamma_delayed, edep_alpha, edep_triton)
 
-    def _analyze_event(self, neutrons, positrons, gammas, ions, row_num,
+    def _analyze_event(self, steps, row_num,
                       initial_kes, true_capture_dists, true_capture_times, 
                       thermal_times, true_capture_scatters, all_track_scatters, escape_dists,
                       scatter_dists, scatter_energies, pos_dists, sample_traces,
                       prompt_gamma_deposits, delayed_gamma_deposits, delayed_gamma_all, shielding_backgrounds,
-                      alpha_energies, triton_energies):
+                      alpha_energies, triton_energies,
+                      edep_positron, edep_gamma_prompt, edep_gamma_delayed, edep_alpha, edep_triton):
         
-        # --- Neutron Analysis ---
-        cap_pos = None
+        neutrons = [s for s in steps if s['pdg'] == 2112]
+        positrons = [s for s in steps if s['pdg'] == -11]
+        gammas = [s for s in steps if s['pdg'] == 22]
+        ions = [s for s in steps if s['pdg'] > 1000000000]
+
+        # --- Energy Deposition Calculation ---
+        def sum_energy_loss(particle_steps):
+            if not particle_steps: return 0.0
+            particle_steps.sort(key=lambda x: x['time'])
+            total_loss = 0.0
+            for i in range(len(particle_steps) - 1):
+                pos = particle_steps[i]['pos']
+                in_det = (abs(pos[0]) < self.det_half_width) and \
+                         (abs(pos[1]) < self.det_half_width) and \
+                         (abs(pos[2]) < self.det_half_width)
+                if in_det:
+                    delta = particle_steps[i]['ke'] - particle_steps[i+1]['ke']
+                    if delta > 0: total_loss += delta
+            
+            last = particle_steps[-1]
+            pos = last['pos']
+            if (abs(pos[0]) < self.det_half_width) and \
+               (abs(pos[1]) < self.det_half_width) and \
+               (abs(pos[2]) < self.det_half_width):
+                total_loss += last['ke']
+            return total_loss
+
+        # Positron Edep
+        e_pos = sum_energy_loss(positrons)
+        if e_pos > 0: edep_positron.append(e_pos)
+        
+        # Identify Annihilation and Capture Times first
+        ann_time = None
+        if positrons:
+            positrons.sort(key=lambda x: x['time'])
+            # Assuming last positron step is annihilation
+            ann_time = positrons[-1]['time']
+
         cap_time = None
         is_captured_in_det = False
-        
         if neutrons:
             neutrons.sort(key=lambda x: x['time'])
+            end_step = neutrons[-1]
+            pos = end_step['pos']
+            in_detector = (abs(pos[0]) < self.det_half_width) and \
+                          (abs(pos[1]) < self.det_half_width) and \
+                          (abs(pos[2]) < self.det_half_width)
+            is_valid_end = (end_step['proc'] == 1) or (end_step['ke'] == 0.0 and in_detector)
+            if in_detector and is_valid_end:
+                is_captured_in_det = True
+                cap_time = end_step['time']
+
+        # Gamma Edep Separation
+        # Split gammas into Prompt and Delayed lists based on time
+        gammas_prompt = []
+        gammas_delayed = []
+        
+        for g in gammas:
+            # If we have annihilation time, check if prompt
+            is_prompt = False
+            if ann_time is not None:
+                if abs(g['time'] - ann_time) < 200.0: # Wide window (200ns) to catch all prompt interactions
+                    is_prompt = True
+                    gammas_prompt.append(g)
+            
+            # If not prompt, check if delayed (only if we have a capture or it's just late)
+            if not is_prompt:
+                # If we have a capture time, use it
+                if cap_time is not None:
+                    if g['time'] > cap_time - 1.0: # Causality
+                        gammas_delayed.append(g)
+                elif ann_time is not None:
+                     # Fallback: if t > 1000ns, assume delayed
+                     if g['time'] > ann_time + 1000.0:
+                         gammas_delayed.append(g)
+
+        e_gam_prompt = sum_energy_loss(gammas_prompt)
+        if e_gam_prompt > 0: edep_gamma_prompt.append(e_gam_prompt)
+
+        e_gam_delayed = sum_energy_loss(gammas_delayed)
+        if e_gam_delayed > 0: edep_gamma_delayed.append(e_gam_delayed)
+
+        # Split Ions
+        alphas = [i for i in ions if i['pdg'] == 1000020040 or abs(i['pdg']-1000020040)<1]
+        tritons = [i for i in ions if i['pdg'] == 1000010030 or abs(i['pdg']-1000010030)<1]
+        
+        e_alpha = sum_energy_loss(alphas)
+        if e_alpha > 0: edep_alpha.append(e_alpha)
+        
+        e_triton = sum_energy_loss(tritons)
+        if e_triton > 0: edep_triton.append(e_triton)
+
+        # --- Neutron Metrics ---
+        if neutrons:
             initial_kes.append(neutrons[0]['ke'])
             
             # Scatters
@@ -260,28 +336,15 @@ void readValidation(const char* filename) {{
                     if neutrons[i+1]['ke'] < 2.5e-8: reached_thermal = True
             all_track_scatters.append(n_physical_scatters)
             
-            # Capture
-            end_step = neutrons[-1]
-            pos = end_step['pos']
-            in_detector = (abs(pos[0]) < self.det_half_width) and \
-                          (abs(pos[1]) < self.det_half_width) and \
-                          (abs(pos[2]) < self.det_half_width)
-            
-            is_valid_end = (end_step['proc'] == 1) or (end_step['ke'] == 0.0 and in_detector)
-            mc_vtx = np.array(end_step['mc'])
-            end_pos_arr = np.array(end_step['pos'])
+            mc_vtx = np.array(neutrons[-1]['mc'])
+            end_pos_arr = np.array(neutrons[-1]['pos'])
             dist = np.linalg.norm(end_pos_arr - mc_vtx)
+            general_cap_pos = neutrons[-1]['pos']
 
-            # Define Capture Time/Pos regardless of location for general gamma matching
-            general_cap_time = end_step['time']
-            general_cap_pos = end_step['pos']
-
-            if in_detector and is_valid_end:
-                is_captured_in_det = True
-                cap_pos = end_step['pos'] 
-                cap_time = end_step['time'] 
+            if is_captured_in_det: # Calculated above
+                cap_pos = neutrons[-1]['pos']
                 true_capture_dists.append(dist)
-                true_capture_times.append(end_step['time'])
+                true_capture_times.append(cap_time)
                 true_capture_scatters.append(n_scatters_to_thermal)
             else:
                 escape_dists.append(dist)
@@ -308,85 +371,75 @@ void readValidation(const char* filename) {{
                 kes = [x['ke'] for x in neutrons]
                 sample_traces.append((times, kes, row_num))
 
-        # --- Positron Analysis ---
-        ann_pos = None
-        ann_time = None
-        if positrons:
-            positrons.sort(key=lambda x: x['time'])
-            ann_step = positrons[-1]
-            for step in positrons:
-                if step['proc'] == 4: ann_step = step
-            mc_vtx = np.array(ann_step['mc'])
-            ann_pos_arr = np.array(ann_step['pos'])
-            ann_pos = ann_step['pos'] 
-            ann_time = ann_step['time'] 
-            dist = np.linalg.norm(ann_pos_arr - mc_vtx)
-            pos_dists.append(dist)
+        # --- Positron Metrics ---
+        # Already calc'd ann_time/pos above
+        if positrons and ann_time:
+             mc_vtx = np.array(positrons[-1]['mc'])
+             ann_pos_arr = np.array(positrons[-1]['pos'])
+             ann_pos = positrons[-1]['pos']
+             dist = np.linalg.norm(ann_pos_arr - mc_vtx)
+             pos_dists.append(dist)
 
-        # --- Ion Analysis (Li-6) ---
+        # --- Ion Metrics (Initial Energy) ---
         if ions:
-            # FIX: Find MAX KE for each species to get initial energy
-            alpha_steps = [x['ke'] for x in ions if x['pdg'] == 1000020040]
-            triton_steps = [x['ke'] for x in ions if x['pdg'] == 1000010030]
-            
-            if alpha_steps:
-                alpha_energies.append(max(alpha_steps))
-            if triton_steps:
-                triton_energies.append(max(triton_steps))
+            alpha_steps = [x['ke'] for x in ions if x['pdg'] == 1000020040 or abs(x['pdg'] - 1000020040) < 1.0]
+            triton_steps = [x['ke'] for x in ions if x['pdg'] == 1000010030 or abs(x['pdg'] - 1000010030) < 1.0]
+            if alpha_steps: alpha_energies.append(max(alpha_steps))
+            if triton_steps: triton_energies.append(max(triton_steps))
 
-        # --- Gamma Analysis ---
+        # --- Gamma Metrics ---
         # 1. Prompt Gammas
-        if ann_pos and ann_time:
-            for g in gammas:
-                if g['time'] >= ann_time:
-                    g_pos = np.array(g['pos'])
-                    d = np.linalg.norm(g_pos - np.array(ann_pos))
-                    if d > 10.0 and (g['time'] - ann_time) < 2.0:
-                        prompt_gamma_deposits.append(d)
-                        break 
+        if ann_time: # Re-use calculated ann_time
+            # Assuming ann_pos calc'd if positrons exist
+            if positrons:
+                 ann_pos = positrons[-1]['pos'] # Recalc just in case
+                 for g in gammas:
+                    if g['time'] >= ann_time:
+                        g_pos = np.array(g['pos'])
+                        d = np.linalg.norm(g_pos - np.array(ann_pos))
+                        if d > 10.0 and (g['time'] - ann_time) < 2.0:
+                            prompt_gamma_deposits.append(d)
+                            break 
 
         # 2. Delayed Gammas (All Sources)
-        if neutrons: # If we had a neutron, we have a capture/stop time
+        if neutrons: 
             for g in gammas:
-                if g['time'] >= general_cap_time:
+                if g['time'] >= neutrons[-1]['time']:
                     g_pos = np.array(g['pos'])
-                    d = np.linalg.norm(g_pos - np.array(general_cap_pos))
-                    if d > 10.0 and (g['time'] - general_cap_time) < 5.0:
+                    d = np.linalg.norm(g_pos - np.array(neutrons[-1]['pos']))
+                    if d > 10.0 and (g['time'] - neutrons[-1]['time']) < 5.0:
                         delayed_gamma_all.append(d)
-                        
-                        # Subset: Internal Capture Only
-                        if is_captured_in_det:
-                            delayed_gamma_deposits.append(d)
+                        if is_captured_in_det: delayed_gamma_deposits.append(d)
                         break
 
         # 3. Shielding Background Analysis
-        if self.has_shielding:
-            for g in gammas:
-                if neutrons:
-                    n_end = neutrons[-1]
-                    end_pos = n_end['pos']
-                    is_outside = not ((abs(end_pos[0]) < self.det_half_width) and 
-                                      (abs(end_pos[1]) < self.det_half_width) and 
-                                      (abs(end_pos[2]) < self.det_half_width))
-                    
-                    if is_outside and g['time'] >= n_end['time']:
-                        g_pos = g['pos']
-                        g_in_det = (abs(g_pos[0]) < self.det_half_width) and \
-                                   (abs(g_pos[1]) < self.det_half_width) and \
-                                   (abs(g_pos[2]) < self.det_half_width)
-                        
-                        if g_in_det:
-                            src_pos = np.array(n_end['pos'])
-                            hit_pos = np.array(g['pos'])
-                            travel_dist = np.linalg.norm(hit_pos - src_pos)
-                            shielding_backgrounds.append(travel_dist)
-                            break 
+        if self.has_shielding and neutrons:
+             n_end = neutrons[-1]
+             # Is outside?
+             end_pos = n_end['pos']
+             is_outside = not ((abs(end_pos[0]) < self.det_half_width) and 
+                               (abs(end_pos[1]) < self.det_half_width) and 
+                               (abs(end_pos[2]) < self.det_half_width))
+             if is_outside:
+                 for g in gammas:
+                    if g['time'] >= n_end['time']:
+                         g_pos = g['pos']
+                         g_in_det = (abs(g_pos[0]) < self.det_half_width) and \
+                                    (abs(g_pos[1]) < self.det_half_width) and \
+                                    (abs(g_pos[2]) < self.det_half_width)
+                         if g_in_det:
+                             src_pos = np.array(n_end['pos'])
+                             hit_pos = np.array(g['pos'])
+                             travel_dist = np.linalg.norm(hit_pos - src_pos)
+                             shielding_backgrounds.append(travel_dist)
+                             break
 
     def _generate_plots_and_stats(self, initial_kes, capture_dists, capture_times, thermal_times,
                        true_capture_scatters, all_track_scatters, escape_dists, 
                        scatter_dists, scatter_energies, pos_dists, sample_traces,
                        prompt_gamma_deposits, delayed_gamma_deposits, delayed_gamma_all, shielding_backgrounds,
-                       alpha_energies, triton_energies):
+                       alpha_energies, triton_energies,
+                       edep_positron, edep_gamma_prompt, edep_gamma_delayed, edep_alpha, edep_triton):
         
         print(f"Generating plots and statistics in {self.plot_dir}...")
         
@@ -465,6 +518,23 @@ void readValidation(const char* filename) {{
             plot_hist_stairs(pos_dists, 50, 'Annihilation Distance (mm)', 'pos_annihilation_dist.png', 'green', x_range=(0, 200),
                              stat_label="Positron Annihilation Distance")
             
+            # Energy Deposition Plots
+            plot_hist_stairs(edep_positron, 50, 'Positron Energy Deposited (MeV)', 'edep_positron.png', 'lime', 
+                             stat_label="Positron Energy Deposition")
+            
+            # Prompt Gamma Energy: Finer binning (10 keV)
+            plot_hist_stairs(edep_gamma_prompt, 120, 'Prompt Gamma Energy Deposited (MeV)', 'edep_gamma_prompt.png', 'magenta', x_range=(0, 1.2),
+                             stat_label="Prompt Gamma Energy Deposition")
+            
+            # Delayed Gamma Energy: Finer binning (10 keV)
+            plot_hist_stairs(edep_gamma_delayed, 250, 'Delayed Gamma Energy Deposited (MeV)', 'edep_gamma_delayed.png', 'purple', x_range=(0, 2.5),
+                             stat_label="Delayed Gamma Energy Deposition")
+            
+            plot_hist_stairs(edep_alpha, 50, 'Alpha Energy Deposited (MeV)', 'edep_alpha.png', 'red', 
+                             stat_label="Alpha Energy Deposition")
+            plot_hist_stairs(edep_triton, 50, 'Triton Energy Deposited (MeV)', 'edep_triton.png', 'blue', 
+                             stat_label="Triton Energy Deposition")
+
             # Gammas
             plot_hist_stairs(prompt_gamma_deposits, 50, 'Prompt Gamma Scatter Distance (mm)', 'prompt_gamma_scatter.png', 'red', x_range=(0, 200),
                              stat_label="Prompt Gamma Scatter Distance")
