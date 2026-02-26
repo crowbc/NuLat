@@ -6,6 +6,18 @@ This repository was cloned from the RatpacExperiment repository found at
 https://github.com/rat-pac/RatpacExperiment and modified to create the NuLat experiment. 
 
 # version history
+25FEB2026 -- v 1.1.1: Hotfix 3.
+                      Added an energy deposition calculation for gammas originating outside
+                      the detector to the validation script. 
+                      Note: This calculation does not add the energy of gammas known to come 
+                      from background sources in validation_test_1 data. Further corrections 
+                      are necessary to the energy deposition logic. 
+                      Additional plots added to the validation script, and statistical summary 
+                      ordering now reflects whether the plots and statistics are for filtered 
+                      or unfiltered data. 
+                      Added directional analysis fiducial data set generation macros located in 
+                      the macros/fiducial subdirectory.
+
 09FEB2026 -- v 1.1.0: Energy depositions.
                       Added logic for analysis of energy depositions in MC tracks to
                       validation script. Note: this logic needs refinement.
