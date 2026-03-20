@@ -19,7 +19,7 @@ class NuLatPhysicsValidator:
         
         self.macro_path = os.path.join(self.data_dir, "readValidation.C")
         self.plot_dir = os.path.join(self.data_dir, "validation_plots")
-        self.stats_file = None#os.path.join(self.plot_dir, "validation_statistics.txt")
+        self.stats_file = None
         
         # Detector Geometry
         self.inch = 25.4
@@ -31,7 +31,7 @@ class NuLatPhysicsValidator:
         # Calculate Offset for Voxel Mapping
         total_span = self.grid_dim * self.step_size - self.gap_size
         self.offset = -total_span / 2.0 + self.cube_size / 2.0
-        self.det_half_width = 160.0 # 5*2.5 inch = 317.5mm, half-width ~ 159mm
+        self.det_half_width = total_span / 2.0 #160.0 # 5*2.5 inch = 317.5mm, half-width ~ 159mm
         
         # Physics Flags
         self.has_shielding = False
@@ -144,6 +144,11 @@ void readValidation(const char* filename) {{
         subprocess.run(f"sed -i 's/*//g' {self.txt_file}", shell=True)
         return True
 
+    def _is_in_detector(self, x, y, z):
+        return (abs(x) <= self.det_half_width and 
+                abs(y) <= self.det_half_width and 
+                abs(z) <= self.det_half_width)
+
     def get_voxel_index(self, pos):
         """Map position (x,y,z) to voxel indices (i,j,k). Returns None if out of bounds."""
         idx = [0, 0, 0]
@@ -245,14 +250,16 @@ void readValidation(const char* filename) {{
         
         ann_time = positrons[-1].get('time') if positrons else 0.0
         cap_time = None
+        neutron_escape = False
+        neutron_cap_in_det = False
         if neutrons:
              n_end = sorted(neutrons, key=lambda x: x.get('time'))[-1]
              pos = n_end.get('pos')
-             in_det = (abs(pos[0]) < self.det_half_width) and \
-                      (abs(pos[1]) < self.det_half_width) and \
-                      (abs(pos[2]) < self.det_half_width)
-             if in_det and (n_end.get('proc')==1 or n_end.get('ke')==0):
+             if self._is_in_detector(pos[0], pos[1], pos[2]) and (n_end.get('proc')==1 or n_end.get('ke')==0):
                  cap_time = n_end.get('time')
+                 neutron_cap_in_det = True
+             else:
+                 neutron_escape = True
         
         split_time = cap_time if cap_time else 1000.0
 
@@ -268,9 +275,7 @@ void readValidation(const char* filename) {{
                 if delta <= 0: continue
                 
                 pos = s1.get('pos')
-                if (abs(pos[0]) < self.det_half_width) and \
-                   (abs(pos[1]) < self.det_half_width) and \
-                   (abs(pos[2]) < self.det_half_width):
+                if self._is_in_detector(pos[0], pos[1], pos[2]):
                        total_loss += delta
                        v_idx = self.get_voxel_index(pos)
                        if v_idx:
@@ -282,9 +287,7 @@ void readValidation(const char* filename) {{
 
             last = particle_steps[-1]
             pos = last.get('pos')
-            if (abs(pos[0]) < self.det_half_width) and \
-               (abs(pos[1]) < self.det_half_width) and \
-               (abs(pos[2]) < self.det_half_width):
+            if self._is_in_detector(pos[0], pos[1], pos[2]):
                 total_loss += last.get('ke')
                 v_idx = self.get_voxel_index(pos)
                 if v_idx:
@@ -422,23 +425,18 @@ void readValidation(const char* filename) {{
         if self.has_shielding and neutrons:
              n_end = sorted(neutrons, key=lambda x: x.get('time'))[-1]
              end_pos = n_end.get('pos')
-             is_outside = not ((abs(end_pos[0]) < self.det_half_width) and 
-                               (abs(end_pos[1]) < self.det_half_width) and 
-                               (abs(end_pos[2]) < self.det_half_width))
-             if is_outside:
+             if neutron_escape:
                  for g in gammas:
                     if g.get('time') >= n_end.get('time'):
                          g_pos = g.get('pos')
-                         g_in_det = (abs(g_pos[0]) < self.det_half_width) and \
-                                    (abs(g_pos[1]) < self.det_half_width) and \
-                                    (abs(g_pos[2]) < self.det_half_width)
+                         g_in_det = self._is_in_detector(g_pos[0], g_pos[1], g_pos[2])
                          if g_in_det:
-                             dist = np.linalg.norm(np.array(g.get('pos')) - np.array(end_pos))# this is working
+                             dist = np.linalg.norm(np.array(g.get('pos')) - np.array(end_pos))
                              evt['shield_bg_dist'] = dist# this is working
                              gsteps = g.get('steps', [])# I don't know about this
                              if gsteps:
                                  edep = process_edep(gsteps)# this isn't working
-                                 evt['shield_bg_edep'] = edep# this isn't working either
+                                 evt['shield_bg_edep'] = edep# this isn't working either, and is the main problem I'm trying to solve.
                              break
         return evt
 

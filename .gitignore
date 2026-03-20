@@ -15,3 +15,6 @@ validation_data*.txt
 pycache/
 archive/
 *.jpg
+output/analysis/plots/
+output/analysis/bin_matrices/
+
