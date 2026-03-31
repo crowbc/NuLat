@@ -6,6 +6,11 @@ This repository was cloned from the RatpacExperiment repository found at
 https://github.com/rat-pac/RatpacExperiment and modified to create the NuLat experiment. 
 
 # version history
+31MAR2026 -- v 1.2.1: Hotfix 4.
+                      Added blinded study analysis method to nulatDirectionalAnalyzer.py. Added a 
+                      macro generator for a multi-run blind directionality study and the macro files 
+                      it created. Added an unblinding analysis script.
+
 20MAR2026 -- v 1.2.0: Fiducial Set Creator and Directional Analyzer.
                       Added createNuLatFiducialSet.py to create directional binning matrices for
                       angles 0 through 359 degrees by binning the separation between prompt and 

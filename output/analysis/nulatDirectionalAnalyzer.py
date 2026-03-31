@@ -128,7 +128,7 @@ class NuLatDirectionalAnalyzer:
             # 5. Clip edep at 0 to prevent negative fluctuations and fill initial NaN to 0
             df['edep'] = df['edep'].fillna(0).clip(lower=0)
 
-            print("Calculations complete!")
+            print("Energy deposition calculations complete!")
             if self.debug:
                 print(f"DataFrame shape: {df.shape}")
                 print(f"Sample rows:\n{df.head(15)}")    
@@ -162,10 +162,10 @@ class NuLatDirectionalAnalyzer:
             alpha_code = 1000020040
             triton_code = 1000010030
             # Prompt: Positrons OR events very early in time (< 1000 ns)
-            prompt_mask = prompt_mask = (df['trackPDG'] == positron_code) | (df['trackTime'] < 1000)
+            prompt_mask = prompt_mask = df['trackPDG'] == positron_code#()&(df['trackTime'] < 1000)
             prompt_events = df[prompt_mask].copy()
             # Delayed: Alpha/Triton from capture OR events late in time (>= 1000 ns)
-            delayed_mask = (df['trackPDG'].isin([alpha_code, triton_code])) | (df['trackTime'] >= 1000)
+            delayed_mask = df['trackPDG'].isin([alpha_code, triton_code])#()&(df['trackTime'] >= 1000)
             delayed_events = df[delayed_mask].copy()
             if self.debug:
                 print(f"Found {len(prompt_events)} prompt tracks and {len(delayed_events)} delayed tracks.")
@@ -340,7 +340,7 @@ class NuLatDirectionalAnalyzer:
             popt[1] = best_fit_angle
             ang_uncert = fit_err[1]
             print(f"Curve fit successful. Best fit angle: {best_fit_angle:.1f}+/-{ang_uncert:.1f} degrees.")
-            log_name = f"frobenius_norm_fit_params{self._sanitize_filename(title_tag)}.log"
+            log_name = f"frobenius_norm_fit_params{self._sanitize_filename(title_tag)}.txt"
             log_path = os.path.join(self.plots_dir, log_name)
             with open(log_path, 'w') as l:
                 log_str = f"{title_tag} Best fit angle: {best_fit_angle}+/-{ang_uncert} degrees.\nFit params: {popt}\nCovariance: {pcov}\nFit error: {fit_err}"
@@ -359,11 +359,12 @@ class NuLatDirectionalAnalyzer:
         plt.ylabel(r"Frobenius Norm $|| \mathrm{Data} - \mathrm{Fiducial} ||_F$")
         plt.grid(True, linestyle='--', alpha=0.6)
         plt.legend()
-        out_name = f"frobenius_norm_{title_tag}.pdf"
+        out_name = f"frobenius_norm_{self._sanitize_filename(title_tag)}.pdf"
         out_path = os.path.join(self.plots_dir, out_name)
         plt.savefig(out_path, bbox_inches='tight')
         plt.close()
         print(f"Saved Frobenius plot to {out_path}")
+        return best_fit_angle, ang_uncert
 
 if __name__ == "__main__":
     analyzer = NuLatDirectionalAnalyzer()
@@ -372,6 +373,7 @@ if __name__ == "__main__":
     print("1) Extract from ROOT file (via uproot)")
     print("2) Load from JSON Binning Matrix")
     print("3) Generate Mock Data")
+    print("4) Run Blind Study Analysis")
     print("0) Exit")
     choice = input("Select an option: ").strip()
     matrix_dict = None
@@ -412,6 +414,61 @@ if __name__ == "__main__":
         matrix_dict, angle = analyzer.generate_mock_data(true_angle=angle)
         title_tag = rf"Mock Data ($\theta={angle}^\circ$)"
 
+    elif choice == '4':
+        print("\n--- Running Blind Study Analysis ---")
+        # Target the blind_study subdirectory
+        blind_dir = "/home/jack/RATPAC2/ratpac-setup/ratpac/NuLat/output/directionality/blind_study"
+        if not os.path.exists(blind_dir):
+            print(f"[!] Directory not found: {blind_dir}")
+            sys.exit(1)
+        # Get all ROOT files in the directory
+        root_files = [f for f in os.listdir(blind_dir) if f.endswith('ntuple.root')]
+        if not root_files:
+            print(f"[!] No ROOT files found in {blind_dir}")
+            sys.exit(1)
+        print(f"Found {len(root_files)} blind study files. Processing...\n")
+        # Loop through and process each file
+        for rf in sorted(root_files):
+            file_path = os.path.join(blind_dir, rf)
+            print(f"--> Processing {rf}...")
+            
+            try:
+                b_df = analyzer.extract_root_data(file_path)
+                b_matrix_dict = analyzer.binEvents(b_df)
+            except Exception as e:
+                print(f"    [!] Error reading {rf}: {e}")
+                continue
+                
+            if not b_matrix_dict:
+                print(f"    [!] No valid data extracted for {rf}. Skipping.")
+                continue
+                
+            # Create a unique title tag based on the filename (e.g., "blind_set_1")
+            base_name = os.path.splitext(rf)[0]
+            b_title_tag = f"Blind Study {base_name}"
+            
+            # 1. Plot Binning Matrix
+            raw_matrix = analyzer.convert_dict_to_matrix(b_matrix_dict)
+            matrix_filename = f"binning_matrix_{analyzer._sanitize_filename(b_title_tag)}.pdf"
+            print(f"    Saving {matrix_filename}...")
+            analyzer.plot_binning_matrix(raw_matrix, matrix_filename, b_title_tag)
+            
+            # 2. Plot Frobenius Norm 
+            # Note: Verify your exact method name here (e.g., plot_frobenius_norm)
+            frob_filename = f"frobenius_norm_{analyzer._sanitize_filename(b_title_tag)}.pdf"
+            print(f"    Saving {frob_filename}...")
+            fit_ang, fit_err = analyzer.run_frobenius_analysis(b_matrix_dict, b_title_tag)
+            fit_angles_filename = "blind_analysis_fits.csv"
+            file_exists = os.path.exists(fit_angles_filename)
+            csv_tag = analyzer._sanitize_filename(b_title_tag)
+            with open(fit_angles_filename, 'a') as f:
+                if not file_exists:
+                    f.write("Data Tag,Best Fit Angle (deg),Error (deg)\n")
+                f.write(f"{csv_tag},{fit_ang},{fit_err}\n")
+            print("    Done.\n")
+        print("Blind study analysis complete! All plots are saved in the plots/ directory.")
+        sys.exit(0)  # We exit here so the single-file plotter at the bottom doesn't run
+
     elif choice == '0':
         print("Exiting...")
         sys.exit(0)
@@ -431,5 +488,11 @@ if __name__ == "__main__":
         if analyzer.debug:
             print(f"Sanitized filename: {matrix_filename}")
         analyzer.plot_binning_matrix(raw_matrix, matrix_filename, f"Binning Matrix - {title_tag}")
-        analyzer.run_frobenius_analysis(matrix_dict, title_tag)
+        fit_ang, fit_err = analyzer.run_frobenius_analysis(matrix_dict, title_tag)
+        fit_angle_filename = "fit_results.csv"
+        file_exists = os.path.exists(fit_angle_filename)
+        with open(fit_angle_filename, 'a') as f:
+            if not file_exists:
+                f.write("Data Tag,Best Fit Angle (deg), Error (deg)\n")
+            f.write(f"{title_tag},{fit_ang},{fit_err}")
         print("\nWorkflow complete! Check the plots/ directory.")
