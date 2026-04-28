@@ -6,6 +6,9 @@ This repository was cloned from the RatpacExperiment repository found at
 https://github.com/rat-pac/RatpacExperiment and modified to create the NuLat experiment. 
 
 # version history
+27APR2026 -- v 1.3.0: Sodium-22 Simulation.
+                      Added sodium-22 decay simulation macro and gamma energy analysis script.
+
 31MAR2026 -- v 1.2.1: Hotfix 4.
                       Added blinded study analysis method to nulatDirectionalAnalyzer.py. Added a 
                       macro generator for a multi-run blind directionality study and the macro files 

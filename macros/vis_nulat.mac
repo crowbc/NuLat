@@ -54,4 +54,8 @@
 /generator/pos/set cube*
 /generator/rate/set 0.0001476
 
-
+#/generator/add combo gun:point
+#/generator/vtx/set gamma 0 0 0 1.274
+#/generator/vtx/set eplus 0 0 0 0.0
+#/generator/pos/set -180 0 0
+#/generator/rate/set 1.0
