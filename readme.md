@@ -7,6 +7,8 @@ framework. Some analysis scripts are included for validation of the detector sim
 This repository was cloned from the [RatpacExperiment](https://github.com/rat-pac/RatpacExperiment) repository found on GitHub and 
 modified to create a simulation for the NuLat experiment.
 
+==========================================================================  
+
 # Version History
 
 08MAY2026 -- v 1.3.1: Hotfix 5.  
@@ -14,7 +16,6 @@ modified to create a simulation for the NuLat experiment.
 *Minor Fixes*:  
 - Corrected markdown language syntax in `readme.md` file.
 - Corrected text in `readme.md` stating incorrect binning matrix size.  
-
 
 --------------------------------------------------------------------------  
 
