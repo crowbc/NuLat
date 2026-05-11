@@ -17,22 +17,16 @@ __________________________________________________________________________
 - Corrected markdown language syntax in `readme.md` file.
 - Corrected text in `readme.md` stating incorrect binning matrix size.  
 
---------------------------------------------------------------------------  
-
 27APR2026 -- v 1.3.0: Sodium-22 Simulation.  
 
-- Added sodium-22 decay simulation macro and gamma energy analysis script.
-
---------------------------------------------------------------------------  
+- Added sodium-22 decay simulation macro and gamma energy analysis script.  
 
 31MAR2026 -- v 1.2.1: Hotfix 4.  
 
 - Added blinded study analysis method to `nulatDirectionalAnalyzer.py`. Added 
 a macro generator for a multi-run blind directionality study and the macro 
 files it created.
-- Added an unblinding analysis script.
-
---------------------------------------------------------------------------  
+- Added an unblinding analysis script.  
 
 20MAR2026 -- v 1.2.0: Fiducial Set Creator and Directional Analyzer.  
 
@@ -49,9 +43,7 @@ particle events.
 - Added `nulatDirectionalAnalyzer.py` for directional reconstruction using 
 energy deposition calculation as a proxy for energy and vertex 
 reconstruction. Options to use previously calculated binning matrices from 
-JSON files included in the script.
-                      
---------------------------------------------------------------------------  
+JSON files included in the script.  
                       
 25FEB2026 -- v 1.1.1: Hotfix 3.  
 
@@ -64,9 +56,7 @@ are necessary to the energy deposition logic.
 ordering now reflects whether the plots and statistics are for filtered  
 or unfiltered data.
 - Added directional analysis fiducial data set generation macros located in  
-the `macros/fiducial` subdirectory.
-
---------------------------------------------------------------------------  
+the `macros/fiducial` subdirectory.  
 
 09FEB2026 -- v 1.1.0: Energy depositions.  
 
@@ -77,16 +67,12 @@ validation script.
 NuLat experiment.  
 *Note*: this requires using absolute paths in macro files.  
 
---------------------------------------------------------------------------  
-
 03FEB2026 -- v 1.0.2: Hotfix 2.  
 
 - Added missing logic for alpha and triton tracks analysis to 
 validation script.
 - Added a configuration subroutine to scan for ROOT files and set Boolean 
-flags for shielding and doping to validation script.
-
---------------------------------------------------------------------------  
+flags for shielding and doping to validation script.  
 
 30JAN2026 -- v 1.0.1: Hotfix 1.  
 
@@ -95,9 +81,7 @@ flags for shielding and doping to validation script.
 (`output/validation/validate_nulat_physics.py`)
 - Added alpha and triton tracks analysis to validation script.
 - Updated gamma tracking to monitor for accidentals from shielding-captured  
-gammas.
-
---------------------------------------------------------------------------  
+gammas.  
 
 28JAN2026 -- v 1.0.0: Initial commit.  
 
