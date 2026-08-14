@@ -30,3 +30,6 @@ echo "Example:"
 echo "  /rat/db/load $SCRIPT_DIR/ratdb/MATERIALS_NULAT.ratdb"
 echo "  /rat/db/set DETECTOR geo_file \"$SCRIPT_DIR/data/NuLat/NULAT5x5x5_instrumented_undoped.geo\""
 echo "----------------------------------------"
+
+# 5. Configure Python environment for analysis scripts
+source nulat_env.sh

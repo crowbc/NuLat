@@ -7,7 +7,7 @@ nulat.sh
 install/*
 build/*
 Config.hh
-*.txt !CMakeLists.txt !validation_statistics.txt
+*.txt !CMakeLists.txt !validation_statistics.txt !requirements.txt
 validation_plots/
 validation_data*.txt
 *.swp
@@ -17,4 +17,5 @@ archive/
 *.jpg
 output/analysis/plots/
 output/analysis/bin_matrices/
+macros/fiducial/angle_*.mac
 

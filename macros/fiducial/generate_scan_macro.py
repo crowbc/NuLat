@@ -8,13 +8,12 @@ def generate_macro():
     step_size = 1
     events_per_angle = 10000
     
-    # Paths (Update these to your actual paths)
-    base_macro_dir = "/home/jack/RATPAC2/ratpac-setup/ratpac/NuLat/macros/fiducial"
-    base_output_dir = "/home/jack/RATPAC2/ratpac-setup/ratpac/NuLat/output/fiducial"
-    
+    # Paths
+    base_macro_dir = os.getcwd()
     # Local NuLat Paths for manual loading
     # (Since env vars RATDB/RATSHARE might be tricky, we hardcode absolute paths for safety)
-    nulat_home = "/home/jack/RATPAC2/ratpac-setup/ratpac/NuLat"
+    nulat_home = os.path.join(base_macro_dir, "../../")#"/home/jack/RATPAC2/ratpac-setup/ratpac/NuLat"
+    base_output_dir = os.path.join(nulat_home, "output/fiducial")
     db_file_materials = os.path.join(nulat_home, "ratdb/MATERIALS_NULAT.ratdb")
     db_file_pmt = os.path.join(nulat_home, "ratdb/PMT_NULAT.ratdb")
     geo_file = os.path.join(nulat_home, "data/NULAT5x5x5_instrumented_Li6.geo")
@@ -37,7 +36,6 @@ def generate_macro():
         shell.write("# Master script to run full angular scan sequentially\n")
         shell.write(f"# Output Directory: {base_output_dir}\n")
         # Source the setup script to ensure 'nulat' alias works -- not necessary if sourced prior to running shell
-        #shell.write(f"source {nulat_home}/setup_nulat.sh\n\n")
         shell.write(f"# WARNING: User must run \"source {nulat_home}/setup_nulat.sh\" prior to executing this script.")
 
         # Loop through angles
